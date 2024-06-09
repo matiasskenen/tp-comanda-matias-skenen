@@ -1,0 +1,74 @@
+❖ Dar de alta y listar usuarios(mozo, bartender...)
+❖ Dar de alta y listar productos(bebidas y comidas)
+❖ Dar de alta y listar mesas
+❖ Dar de alta y listar pedidos
+
+
+
+1-Barra de tragos y vinos: Ubicada en la entrada.
+2-Barra de choperas de cerveza artesanal: Ubicada en el patio trasero.
+3-Cocina: Donde se preparan todos los platos de comida.
+4-Candy Bar: Encargado de la preparación de postres artesanales.
+
+
+#bartender
+#cerveceros
+#cocineros
+#mozos
+#socios
+--------------------------------------------------------
+Comanda/Anotador de pedidos:
+--------------------------------------------------------
+Codigo:
+(bebida, cerveza, comida, nombre del cliente)
+
+bedida
+cerveza
+comida
+nombre del cliente
+id
+estado
+
+Se agrega al archivo de cada sector:
+preguntando si ya existe el archivo..
+agrego el numero de id y el pedido.
+
+Ademas agrego otro archivo con toda la informacion del pedido aparte.
+en otro archivo.
+
+(Si se Recibe una foto, guardar y enviar mensaje.
+Sino tambien enviar mensaje de que no hay foto)
+
+Id: pedido. (retorno el id de pedido)(entrego el id/numero en variable)(al cliente)
+--------------------------------------------------------
+"Ejemplo de pedido"
+Vino, cerveza y empanda:
+
+Vino: #cerveceros (Aparezca en su lista de pendientes)
+Cerveza: #bartender (Aparezca en su lista de pendientes)
+Empanda: #cocineros (Aparezca en su lista de pendientes)
+
+(Con la opcion de tomar una foto o NO)
+*con sus integrantes
+
+(La foto relacionar con el pedido)
+--------------------------------------------------------
+PARTE 2:
+(archivos para cada sector)
+(numero de cocineros)
+(intervalo de tiempo de preparacion)
+
+Despues de entregar el pedido,
+se llaman a los demas archivos (require)
+(el archivo estar armado para al llamarse haga toda una funcion)
+
+Consulta su archivo sector.
+Consulta si el estado es "pendiente"
+inicia funcion de:
+Convertir a "preparacion"
+Aumenta id-acumulador-cocinero: +1. Si llega a la cantidad de cocineros (ejemplo 3)
+Deja de aceptar pedidos.
+30segundos.
+--------------------------------------------------------
+PARTE 3:
+Despues de un tiempo: convierte (listo para servir)
