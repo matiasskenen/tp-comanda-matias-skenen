@@ -11,7 +11,7 @@ function conectar()
         $conectar = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
         $conectar->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         
-        return $conexion;
+        return $conectar;
     }
     catch (PDOException $exepcion)
     {

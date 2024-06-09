@@ -1,5 +1,6 @@
 <?php
 require_once '../vendor/autoload.php';
+require_once "../db/conectarDB.php";
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -7,19 +8,25 @@ use Slim\Factory\AppFactory;
 
 $app = AppFactory::create();
 
+
 $app->get('/', function (Request $request, Response $response, array $args) {
     $response->getBody()->write("Funciona!");
+    
     return $response;
 });
 
-$app->get("/usuarios", function(Request $request, Response $response, $args)
+//http://localhost:666/usuarios
+$app->post("/usuarios", function(Request $request, Response $response, $args)
 {
     $params = $request->getParsedBody();
     
-    if (!isset($params['usuario']) || empty($params["usuario"]) || !isset($params['tipo']) || empty($params["tipo"]) || !isset($params['nombre']) || empty($params["nombre"]) || !isset($params['apellido']) || empty($params["apellido"]))
+    if (!isset($params['usuario']) || empty($params["usuario"]) || !isset($params['tipo']) || empty($params["tipo"]) 
+    || !isset($params['nombre']) || empty($params["nombre"]) || !isset($params['apellido']) || empty($params["apellido"]))
     {
-        $response->getBody()->write(json_encode(["error" => "Debes completar todos los campos"]));
+        
+        $response->getBody()->write(json_encode(["error" => "completar todos los campos [usuario][tipo][nombre][apellido]"]));
         return $response->withHeader('Content-Type', 'application/json');
+        
     }
     else
     {
@@ -48,8 +55,9 @@ $app->get("/usuarios", function(Request $request, Response $response, $args)
     
         return $response->withHeader('Content-Type', 'application/json');
     }
-    
 });
+
+
 
 /*
 $app->get("/usuarios", function(Request $request, Response $response, $args)
@@ -59,12 +67,12 @@ $app->get("/usuarios", function(Request $request, Response $response, $args)
     $response->getBody()->write(json_encode($params)); 
     return $response;
 });
+*/
 
-
-
-///http://localhost:666/
-//php -S localhost:666 -t app
+/*
+http://localhost:666/
+php -S localhost:666 -t app
+*/
 
 $app->run();
-*/
 ?>
