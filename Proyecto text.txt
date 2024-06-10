@@ -1,7 +1,13 @@
+SPRINT 1
 ❖ Dar de alta y listar usuarios(mozo, bartender...)
 ❖ Dar de alta y listar productos(bebidas y comidas)
 ❖ Dar de alta y listar mesas
 ❖ Dar de alta y listar pedidos
+
+SPRINT 2
+❖ Usar MW de usuarios/perfiles
+❖ Verificar usuarios para las tareas de ABM
+❖ Manejo del estado del pedido
 
 
 
@@ -66,9 +72,16 @@ Consulta su archivo sector.
 Consulta si el estado es "pendiente"
 inicia funcion de:
 Convertir a "preparacion"
+tiempo de estimado de preparacion: (cada cocinero asigna)
 Aumenta id-acumulador-cocinero: +1. Si llega a la cantidad de cocineros (ejemplo 3)
 Deja de aceptar pedidos.
 30segundos.
+
+
+Tiempo de preparacion:
+Si el cocinero esta ocupado, eso generara que su sector, su tiempo, sea mas largo o mas grande.
+por acumulacion de pedidos.
+lo cual infiere al momento de entregar el tiempo de estimacion.
 --------------------------------------------------------
 PARTE 3:
 Despues de un tiempo: convierte (listo para servir)

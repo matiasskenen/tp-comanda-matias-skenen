@@ -52,4 +52,16 @@ function mesasCompletas($db, $mesasMaximas)
     return $cantidadMesas >= $mesasMaximas;
 }
 
+function pedidoExiste($id_mesa, $producto, $cantidad, $db)
+{
+    $consulta = "SELECT COUNT(*) FROM pedidos WHERE id_mesa = :id_mesa AND producto = :producto AND cantidad = :cantidad";
+    $stmt = $db->prepare($consulta);
+    $stmt->bindParam(':id_mesa', $id_mesa);
+    $stmt->bindParam(':producto', $producto);
+    $stmt->bindParam(':cantidad', $cantidad);
+    $stmt->execute();
+    
+    return $stmt->fetchColumn() > 0;
+}
+
 ?>
