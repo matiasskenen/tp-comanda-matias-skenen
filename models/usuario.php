@@ -57,7 +57,7 @@ class Usuario{
 
     public static function modificarUsuario($id, $response)
     {
-        parse_str(file_get_contents("php://input"), $params);
+        parse_str(file_get_contents("php://input"), $parametros);
         $db = conectar();
 
 
@@ -65,10 +65,10 @@ class Usuario{
 
             try {
                 $update = $db->prepare($consulta);
-                $update->bindParam(':usuario', $params['usuario']);
-                $update->bindParam(':puesto', $params['puesto']);
-                $update->bindParam(':clave', $params['clave']);
-                $update->bindParam(':estado', $params['estado']);
+                $update->bindParam(':usuario', $parametros['usuario']);
+                $update->bindParam(':puesto', $parametros['puesto']);
+                $update->bindParam(':clave', $parametros['clave']);
+                $update->bindParam(':estado', $parametros['estado']);
                 $update->bindParam(':id', $id);
                 $update->execute();
                 $response->getBody()->write(json_encode(["mensaje" => "Usuario actualizado exitosamente"]));
@@ -81,7 +81,6 @@ class Usuario{
             return $response->withHeader('Content-Type', 'application/json');
         
     }
-
 
     //CONVERTIR EL INDEX EN DELETE ESTA FUNCION Y ADAPTARLA CON SUS PROMPTS EN POSMAN. (FUNCIONA EN PUT)
     public static function borrarUsuario($id, $response)
@@ -130,7 +129,6 @@ class Usuario{
         return $response->withHeader('Content-Type', 'application/json');
     }
 
-
     public function Puesto($valor)
     {
         switch($valor)
@@ -162,7 +160,7 @@ class Usuario{
             case "Baja":
                 return 3;
             default:
-                return 'Error';
+                return 'error';
 
         }
     }

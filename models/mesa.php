@@ -109,7 +109,7 @@ class Mesas{
             case 4:
                 return "cerrada";
             default:
-                return 'Error';
+                return 'error';
     
         }
     }

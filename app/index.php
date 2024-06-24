@@ -71,18 +71,19 @@ $app->group('/orden', function (RouteCollectorProxy $group) {
   $group->get('[/]', \OrdenController::class . ':TraerTodos');  // Ajuste aquí
   $group->get('/{id}', \OrdenController::class . ':TraerUno');  // Ajuste aquí
   $group->post('[/]', \OrdenController::class . ':CargarUno');  // Ajuste aquí
-  $group->put('/{id}', \OrdenController::class . ':ModificarUno');  // Ajuste aquí
+  $group->put('/modificarpedido', \OrdenController::class . ':ModificarUno');  // Ajuste aquí
+  $group->put('/modificarestado', \OrdenController::class . ':ModificarEstado'); 
 });
 
 
 
 $app->group('/comanda', function (RouteCollectorProxy $group) {
-  $group->get('[/]', \ComandaController::class . ':TraerTodos');  // Ajuste aquí
-  $group->get('/{id}', \ComandaController::class . ':TraerUno');  // Ajuste aquí
-  $group->post('[/]', \ComandaController::class . ':CargarUno');  // Ajuste aquí
-  $group->put('/{id}', \ComandaController::class . ':ModificarUno');  // Ajuste aquí
-  //$group->('/{id}', \ComandaController::class . ':BorrarUno');  // Ajuste aquí
+  $group->get('[/]', \ComandaController::class . ':TraerTodos');  
+  $group->get('/{id}', \ComandaController::class . ':TraerUno');  
+  $group->post('[/]', \ComandaController::class . ':CargarUno');  
+  $group->put('/{id}', \ComandaController::class . ':ModificarUno');   
 });
+
 
 
 $app->get('[/]', function (Request $request, Response $response) {    
