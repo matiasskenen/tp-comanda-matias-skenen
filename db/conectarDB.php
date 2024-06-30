@@ -29,7 +29,6 @@ function usuarioExiste($usuario, $db)
     return $insert->fetchColumn() > 0;
 }
 
-
 function productoExiste($tipo, $nombre, $db)
 {
     $consulta = "SELECT COUNT(*) FROM productos WHERE tipo = :tipo AND nombre = :nombre";

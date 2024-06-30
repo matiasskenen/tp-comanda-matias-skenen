@@ -8,6 +8,9 @@ php -S localhost:666 -t app
 
 require_once '../vendor/autoload.php';
 //require_once "../middlewares/authMid.php";
+require_once '../middlewares/UsuariosMiddleware.php';
+require_once '../middlewares/UsuariosMiddleware.php';
+
 
 //rutas
 require_once './controllers/UsuarioController.php';
@@ -50,11 +53,26 @@ $app->addBodyParsingMiddleware();
 //BM
 
 $app->group('/usuarios', function (RouteCollectorProxy $group) {
+
+  $group->post('/login', \UsuarioController::class . ':LogIn'); // token
   $group->get('[/]', \UsuarioController::class . ':TraerTodos');
   $group->get('/{usuario}', \UsuarioController::class . ':TraerUno');
-  $group->post('[/]', \UsuarioController::class . ':CargarUno');
-  $group->put('/{id}', \UsuarioController::class . ':ModificarUno');
-  $group->delete('/{id}', \UsuarioController::class . ':BorrarUno');
+
+
+  //Socios
+  $group->post('/alta', \UsuarioController::class . ':CargarUno')
+  ->add(\UsuariosMiddleware::class . ':VerificaAccesoSocio');
+
+  $group->put('/modificar', \UsuarioController::class . ':ModificarUno')
+  ->add(\UsuariosMiddleware::class . ':VerificaAccesoSocio');
+
+  $group->delete('/borrar/{id}', \UsuarioController::class . ':BorrarUno')
+  ->add(\UsuariosMiddleware::class . ':VerificaAccesoSocio');
+  
+  /*
+  $group->get('/generarCSV', \UsuarioController::class . ':GenerarCSV');
+  */
+
 });
 
 
@@ -65,8 +83,6 @@ $app->group('/mesas', function (RouteCollectorProxy $group) {
   $group->put('/{id}', \MesasController::class . ':ModificarUno');
 });
 
-
-
 $app->group('/orden', function (RouteCollectorProxy $group) {
   $group->get('[/]', \OrdenController::class . ':TraerTodos');  // Ajuste aquí
   $group->get('/{id}', \OrdenController::class . ':TraerUno');  // Ajuste aquí
@@ -75,8 +91,6 @@ $app->group('/orden', function (RouteCollectorProxy $group) {
   $group->put('/modificarestado', \OrdenController::class . ':ModificarEstado'); 
 });
 
-
-
 $app->group('/comanda', function (RouteCollectorProxy $group) {
   $group->get('[/]', \ComandaController::class . ':TraerTodos');  
   $group->get('/{id}', \ComandaController::class . ':TraerUno');  
@@ -84,11 +98,8 @@ $app->group('/comanda', function (RouteCollectorProxy $group) {
   $group->put('/{id}', \ComandaController::class . ':ModificarUno');   
 });
 
-
-
 $app->get('[/]', function (Request $request, Response $response) {    
     $payload = json_encode(array("mensaje" => "Slim Framework 4 PHP"));
-    
     $response->getBody()->write($payload);
     return $response->withHeader('Content-Type', 'application/json');
 });

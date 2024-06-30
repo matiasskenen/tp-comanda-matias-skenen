@@ -4,16 +4,17 @@ require_once '../db/conectarDB.php';
 
 class Usuario{
 
-    public $idUsuario;
     public $nombre;
     public $mail;
     public $clave;
     public $puesto;
     public $estado;
     public $idPuesto;
-    public $idEstado; 
+    public $idEstado;
     public $fecha_ingreso;
     public $fecha_salida;
+    public $id_usuario;
+    public $usuario;
 
 
     public function GetIdPuesto(){
@@ -134,17 +135,15 @@ class Usuario{
         switch($valor)
         {
             case 'Socio':
-                return 1;
             case 'Bartender':
-                return 2;
             case 'Cervecero':
-                return 3;
             case 'Cocinero':
-                return 4;
             case 'Mozo':
-                return 5;
+                return true;
+            break;
             default:
-                return 'error';
+                return false;
+            break;
 
         }
     }
@@ -154,15 +153,24 @@ class Usuario{
         switch($valor)
         {
             case "Disponible":
-                return 1;
             case "Suspendido":
-                return 2;
             case "Baja":
-                return 3;
+                return true;
+            break;
             default:
-                return 'error';
+                return false;
+            break;
 
         }
+    }
+
+    public static function validarEstado($puesto, $estado)
+    {
+        if(Puesto($puesto) &&  Estado($estado))
+        {
+            return true;
+        }
+    
     }
 
     //Hacer un metodo para consultar el id de usuario.
@@ -176,4 +184,30 @@ class Usuario{
         $consulta = "UPDATE usuarios SET usuario = :usuario, tipo = :tipo, clave = :clave, nombre = :nombre, apellido = :apellido 
         WHERE id_usuario = :id";
     }
+
+    public static function ObtenerUsuarioLogIn($id_usuario)
+    {
+        $db = conectar();
+    
+        $consulta = "SELECT usuario, puesto, clave, estado, mail, fecha_ingreso, fecha_salida 
+                     FROM usuarios 
+                     WHERE id_usuario = :id_usuario";
+    
+        try {
+            $stmt = $db->prepare($consulta);
+            
+            $stmt->bindValue(':id_usuario', $id_usuario, PDO::PARAM_INT);
+            
+            $stmt->execute();
+    
+            return $stmt->fetchObject('Usuario');
+            
+        } catch (PDOException $ex) {
+            $error = ["error" => $ex->getMessage()];
+            return $error;
+        }
+    }
+
+    
+
 }

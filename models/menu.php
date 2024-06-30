@@ -41,7 +41,6 @@ class Menu{
             case 'Hamburguesa':
             default:
                 return 'error';
-
         }
     }
 
