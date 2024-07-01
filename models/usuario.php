@@ -58,7 +58,7 @@ class Usuario{
 
     public static function modificarUsuario($id, $response)
     {
-        parse_str(file_get_contents("php://input"), $parametros);
+        parse_str(Filee_get_contents("php://input"), $parametros);
         $db = conectar();
 
 
@@ -94,7 +94,7 @@ class Usuario{
             $datos->bindParam(':usuario', $usuario);
             $datos->execute();
 
-            $rowCount = $datos->rowCount(); // numero de filas afectadas
+            $rowCount = $datos->rowCount(); // numero de Fileas afectadas
             
             if ($rowCount > 0) {
 
@@ -210,6 +210,39 @@ class Usuario{
             return $error;
         }
     }
+  
+    public static function procesarCSV($File)
+    {
+        $db = conectar();
+
+        $consulta = "INSERT INTO usuarios (usuario, puesto, clave, estado, mail, fecha_ingreso, fecha_salida) 
+                     VALUES (:usuario, :puesto, :clave, :estado, :mail, :fecha_ingreso, :fecha_salida)";
+
+        $insert = $db->prepare($consulta);
+
+        if (($handle = fopen($File, "r")) !== FALSE) {
+            fgetcsv($handle);
+            
+
+            while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) 
+            {
+                $insert->bindValue(':usuario', $data[0], \PDO::PARAM_STR);
+                $insert->bindValue(':puesto', $data[1], \PDO::PARAM_STR);
+                $insert->bindValue(':clave', password_hash($data[2], PASSWORD_DEFAULT), \PDO::PARAM_STR); 
+                $insert->bindValue(':estado', $data[3], \PDO::PARAM_STR);
+                $insert->bindValue(':mail', $data[4], \PDO::PARAM_STR);
+                $insert->bindValue(':fecha_ingreso', $data[5], \PDO::PARAM_STR);
+                $insert->bindValue(':fecha_salida', $data[6], \PDO::PARAM_STR);
+                $insert->execute();
+            }
+
+            $response->getBody()->write(json_encode(['Mensaje' => 'Datos ingresados']));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+
+            fclose($handle);
+        }
+    }
+
 
     
 

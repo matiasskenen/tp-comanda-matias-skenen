@@ -145,55 +145,28 @@ class UsuarioController extends Usuario implements IApiUsable
 
     public function GenerarCSV($request, $response, $args)
     {
-        $header = $request->getHeaderLine('authorization'); 
+        $uploadedFiles = $request->getUploadedFiles();
+
+        // Verificar que el archivo se haya subido
+        if (isset($uploadedFiles['csv']) && $uploadedFiles['csv']->getError() === UPLOAD_ERR_OK) {
+            $csvFile = $uploadedFiles['csv'];
+            $csvFilePath = $csvFile->getStream()->getMetadata('uri');
+            
+            $datos = Usuario::procesarCSV($csvFilePath);
+
+            $response->getBody()->write(json_encode($datos));
+            return $response->withHeader('Content-Type', 'application/json');
+        } 
+        else {
+            $response->getBody()->write(json_encode(['error' => 'Error al subir el archivo CSV']));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+        }
     
-        if(empty($header))
-        {
-            $response->getBody()->write(json_encode(array("error" => "No se ingreso el token")));
-            $response = $response->withStatus(401);
-        }
-        else
-        {
-                $token = trim(explode("Bearer", $header)[1]);
-                
-                $data = AutenticacionJWT::ObtenerData($token);
-                $puesto = $data->tipo_usuario;
-                $nombre = $data->usuario;
+    }
+    
 
-                if($puesto == "socio")
-                {
-                    registrarOperacion($nombre, $puesto, "DescargarCSV", $response);
-
-                    try
-                    {
-                        $lista = Usuario::obtenerTodos();
-                        $archivo = fopen('./csv/usuarios.csv', 'w');
-            
-                        foreach($lista as $datos)
-                        {
-                            $fila = get_object_vars($datos);
-                            fputcsv($archivo, $fila);
-                        }
-                        fclose($archivo);
-            
-                        $response->getBody()->write("Archivo guardado correctamente");
-                        //Entregar csv repo
-                        return $response->withHeader('Content-Type', 'application/json');
-                    }
-                    catch(Exeption)
-                    {
-                        $response->getBody()->write("Error al guardar");
-                        return $response->withHeader('Content-Type', 'application/json');
-                    }
-                }
-                else
-                {
-                    $response->getBody()->write(json_encode(array("error" => "Tiene que ser Socio para Descargar")));
-                    $response = $response->withStatus(401);
-                }
-
-
-        }
+    public function DescargarCSV($request, $response, $args)
+    {
     
     }
 }

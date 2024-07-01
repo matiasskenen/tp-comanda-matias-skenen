@@ -68,8 +68,12 @@ $app->group('/usuarios', function (RouteCollectorProxy $group) {
   $group->delete('/borrar', \UsuarioController::class . ':BorrarUno')
   ->add(\UsuariosMiddleware::class . ':VerificaAccesoSocio');
   
+  $group->post('/generarCSV', \UsuarioController::class . ':GenerarCSV')
+  ->add(\UsuariosMiddleware::class . ':VerificaAccesoSocio');
+
   /*
-  $group->get('/generarCSV', \UsuarioController::class . ':GenerarCSV');
+  $group->get('/descargar', \UsuarioController::class . ':DescargarCSV')
+  ->add(\UsuariosMiddleware::class . ':VerificaAccesoSocio');
   */
 
 });
