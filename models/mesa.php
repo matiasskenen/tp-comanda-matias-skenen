@@ -47,7 +47,7 @@ class Mesas{
                 $response->getBody()->write(json_encode(["mensaje" => "Mesa agregada exitosamente"]));
 
             } catch (PDOException $exepcion) {
-                $error = array("error" => $exepcion->getMessage());
+                $error = array("error" => $exepcion->getmensaje());
                 $response->getBody()->write(json_encode($error));
             }
 
@@ -70,7 +70,7 @@ class Mesas{
         }
         catch (PDOException $exepcion)
         {
-            $error = array("error" => $exepcion->getMessage());
+            $error = array("error" => $exepcion->getmensaje());
             $response->getBody()->write(json_encode($error));
         }
     

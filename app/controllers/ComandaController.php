@@ -2,6 +2,7 @@
 
 
 require_once '../models/comanda.php';
+require_once '../middlewares/UsuariosMiddleware.php';
 require_once './interfaces/IApiUsable.php';
 
 class ComandaController extends Comandas implements IApiUsable
@@ -49,25 +50,51 @@ class ComandaController extends Comandas implements IApiUsable
 
     public function TraerTodos($request, $response, $args)
     {
-        $db = conectar();
-    
-        $consulta = "SELECT * FROM comandas";
-    
-        try {
-            $insert = $db->query($consulta);
-            $usuarios = $insert->fetchAll(PDO::FETCH_ASSOC);
-    
-            if (count($usuarios) > 0) {
-                $response->getBody()->write(json_encode($usuarios));
-            } else {
-                $message = array("message" => "No se encontraron registros en la tabla.");
-                $response->getBody()->write(json_encode($message));
+        $parametros = $request->getQueryParams();
+        $header = $request->getHeaderLine('authorization'); 
+        if(empty($header))
+        {
+            if(!(isset($parametros['codigo_comanda'])))
+            {
+                $response->getBody()->write(json_encode(array("error" => "No se ingreso codigo_comanda")));
+                $response = $response->withStatus(401);
             }
-        } catch (PDOException $excepcion) {
-            $error = array("error" => $excepcion->getMessage());
-            $response->getBody()->write(json_encode($error));
+            else
+            {
+                Comandas::obtenerTodos($parametros['codigo_comanda'], $response);
+            }
         }
+        else
+        {
+            $db = conectar();
+
+            $token = trim(explode("Bearer", $header)[1]);
+            
+            $data = AutenticacionJWT::ObtenerData($token);
+            $puesto = $data->tipo_usuario;
+            if($puesto == "socio")
+            {
+                $consulta = "SELECT * FROM comandas";
     
+                try {
+                    $insert = $db->query($consulta);
+                    $usuarios = $insert->fetchAll(PDO::FETCH_ASSOC);
+            
+                    if (count($usuarios) > 0) {
+                        $response->getBody()->write(json_encode($usuarios));
+                    } else {
+                        $mensaje = array("mensaje" => "No se encontraron registros en la tabla.");
+                        $response->getBody()->write(json_encode($mensaje));
+                    }
+                } catch (PDOException $excepcion) {
+                    $error = array("error" => $excepcion->getmensaje());
+                    $response->getBody()->write(json_encode($error));
+                }
+            }
+        }
+            
+
+        $mensaje = json_encode(array("mensaje" => "Orden Estado actualizada con exito")); 
         return $response->withHeader('Content-Type', 'application/json');
     }
 

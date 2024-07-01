@@ -66,35 +66,39 @@ class Comandas{
             $consultaComanda->execute();
             
 
-            $response->getBody()->write(json_encode(["mensaje" => "Comanda agregada exitosamente: Codigo = ". $this->$codigo_comanda]));
+            $response->getBody()->write(json_encode(["mensaje" => "Comanda agregada exitosamente: Codigo = ". $this->codigo_comanda]));
 
         } catch (PDOException $exepcion) {
-            $error = array("error" => $exepcion->getMessage());
+            $error = array("error" => $exepcion->getmensaje());
             $response->getBody()->write(json_encode($error));
         }
 
         return $response->withHeader('Content-Type', 'application/json');
     }
 
-    public static function obtenerTodos()
+    public static function obtenerTodos($codigo_comanda, $response)
     {
-        $db = conectar();
-
-        $consulta = "SELECT * FROM comandas";
+        try {
+            $db = conectar();
+            $consulta = "SELECT * FROM comandas WHERE codigo_comanda = :codigo_comanda";
+            $datos = $db->prepare($consulta);
+            $datos->bindParam(':codigo_comanda', $codigo_comanda);
+            $datos->execute();
     
-        try
-        {
-            $insert = $db->query($consulta);
-            $usuarios = $insert->fetchAll(PDO::FETCH_ASSOC);
-            $response->getBody()->write(json_encode($usuarios));
-        }
-        catch (PDOException $exepcion)
-        {
-            $error = array("error" => $exepcion->getMessage());
-            $response->getBody()->write(json_encode($error));
-        }
+            $resultado = $datos->fetch(PDO::FETCH_ASSOC);
     
-        return $response->withHeader('Content-Type', 'application/json');
+            if ($resultado) {
+                $response->getBody()->write(json_encode($resultado));
+            } else {
+                $mensaje = array("mensaje" => "No se encontraron registros en la tabla.");
+                $response->getBody()->write(json_encode($mensaje));
+            }
+    
+        } catch (PDOException $e) {
+            // Manejar errores de base de datos
+            echo "Error en la base de datos: " . $e->getmensaje();
+            return null;
+        }
     }
 
     public static function modificarComanda($id, $estado)
@@ -114,7 +118,7 @@ class Comandas{
             echo "Comanda modificada exitosamente";
         } catch (PDOException $e) {
             // Manejo del error
-            echo "Error: " . $e->getMessage();
+            echo "Error: " . $e->getmensaje();
         }
     }
 

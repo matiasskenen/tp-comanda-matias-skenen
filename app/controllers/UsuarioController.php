@@ -120,7 +120,7 @@ class UsuarioController extends Usuario implements IApiUsable
             $response->getBody()->write(json_encode(array("token" => $token)));
             return $response->withHeader('Content-Type', 'application/json');
         } catch (Exception $e) {
-            $response->getBody()->write(json_encode(array("error" => "Error al generar el token: " . $e->getMessage())));
+            $response->getBody()->write(json_encode(array("error" => "Error al generar el token: " . $e->getmensaje())));
             return $response->withStatus(500)->withHeader('Content-Type', 'application/json'); // Internal Server Error
         }
 

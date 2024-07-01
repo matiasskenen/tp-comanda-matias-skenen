@@ -82,10 +82,10 @@ $app->group('/mesas', function (RouteCollectorProxy $group) {
 });
 
 $app->group('/orden', function (RouteCollectorProxy $group) {
-  $group->get('[/]', \OrdenController::class . ':TraerTodos');  // Ajuste aquí
-  $group->get('/{id}', \OrdenController::class . ':TraerUno');  // Ajuste aquí
-  $group->post('[/]', \OrdenController::class . ':CargarUno');  // Ajuste aquí
-  $group->put('/modificarpedido', \OrdenController::class . ':ModificarUno');  // Ajuste aquí
+  $group->get('[/]', \OrdenController::class . ':TraerTodos');  
+  $group->get('/{id}', \OrdenController::class . ':TraerUno');  
+  $group->post('[/]', \OrdenController::class . ':CargarUno');
+  $group->put('/modificarpedido', \OrdenController::class . ':ModificarUno');
   $group->put('/modificarestado', \OrdenController::class . ':ModificarEstado'); 
 });
 

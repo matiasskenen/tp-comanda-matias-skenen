@@ -49,7 +49,7 @@ class Usuario{
                 $response->getBody()->write(json_encode(["mensaje" => "Usuario agregado exitosamente"]));
 
             } catch (PDOException $exepcion) {
-                $error = array("error" => $exepcion->getMessage());
+                $error = array("error" => $exepcion->getmensaje());
                 $response->getBody()->write(json_encode($error));
             }
 
@@ -75,7 +75,7 @@ class Usuario{
                 $response->getBody()->write(json_encode(["mensaje" => "Usuario actualizado exitosamente"]));
 
             } catch (PDOException $exepcion) {
-                $error = ["error" => $exepcion->getMessage()];
+                $error = ["error" => $exepcion->getmensaje()];
                 $response->getBody()->write(json_encode($error));
             }
 
@@ -101,7 +101,7 @@ class Usuario{
             $response->getBody()->write(json_encode(["mensaje" => "Usuario Eliminado exitosamente"]));
 
         } catch (PDOException $exepcion) {
-            $error = ["error" => $exepcion->getMessage()];
+            $error = ["error" => $exepcion->getmensaje()];
             $response->getBody()->write(json_encode($error));
         }
 
@@ -123,7 +123,7 @@ class Usuario{
         }
         catch (PDOException $exepcion)
         {
-            $error = array("error" => $exepcion->getMessage());
+            $error = array("error" => $exepcion->getmensaje());
             $response->getBody()->write(json_encode($error));
         }
     
@@ -203,7 +203,7 @@ class Usuario{
             return $stmt->fetchObject('Usuario');
             
         } catch (PDOException $ex) {
-            $error = ["error" => $ex->getMessage()];
+            $error = ["error" => $ex->getmensaje()];
             return $error;
         }
     }

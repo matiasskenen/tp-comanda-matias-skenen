@@ -40,7 +40,7 @@ class Orden{
                 $response->getBody()->write(json_encode(["mensaje" => "Orden agregada exitosamente"]));
 
             } catch (PDOException $exepcion) {
-                $error = array("error" => $exepcion->getMessage());
+                $error = array("error" => $exepcion->getmensaje());
                 $response->getBody()->write(json_encode($error));
             }
 
@@ -71,10 +71,10 @@ class Orden{
             if ($ordenes) {
                 $response->getBody()->write(json_encode($ordenes));
             } else {
-                $response->getBody()->write(json_encode(array("message" => "No hay ordenes disponibles.")));
+                $response->getBody()->write(json_encode(array("mensaje" => "No hay ordenes disponibles.")));
             }
         } catch (PDOException $excepcion) {
-            $error = array("error" => $excepcion->getMessage());
+            $error = array("error" => $excepcion->getmensaje());
             $response->getBody()->write(json_encode($error));
         }
     
@@ -96,12 +96,12 @@ class Orden{
             $update->execute();
         } catch (PDOException $e) {
 
-            echo "Error en la base de datos: " . $e->getMessage();
+            echo "Error en la base de datos: " . $e->getmensaje();
 
         }
     }
 
-    public static function ModificarOrdenEstado($id_comanda, $estado, $puesto)
+    public static function ModificarOrdenEstado($id_comanda, $estado, $puesto, $demora)
     {
         if(!($puesto == "socio"))
         {
@@ -109,11 +109,12 @@ class Orden{
                 $db = conectar();
                 
                 // Ajuste de la consulta SQL
-                $consulta = "UPDATE comanda_productos SET estado = :estado WHERE id_comanda = :id_comanda AND puesto = :puesto";
+                $consulta = "UPDATE comanda_productos SET estado = :estado, demora = :demora WHERE id_comanda = :id_comanda AND puesto = :puesto";
         
                 $update = $db->prepare($consulta);
                 // Vincular los parámetros correctamente
                 $update->bindParam(':estado', $estado);
+                $update->bindParam(':demora', $demora);
                 $update->bindParam(':id_comanda', $id_comanda);
                 $update->bindParam(':puesto', $puesto);
         
@@ -122,7 +123,7 @@ class Orden{
         
             } catch (PDOException $e) {
                 // Manejar la excepción y mostrar un mensaje de error
-                echo "Error en la base de datos: " . $e->getMessage();
+                echo "Error en la base de datos: " . $e->getmensaje();
             }
         }
         else
@@ -143,10 +144,127 @@ class Orden{
         
             } catch (PDOException $e) {
                 // Manejar la excepción y mostrar un mensaje de error
-                echo "Error en la base de datos: " . $e->getMessage();
+                echo "Error en la base de datos: " . $e->getmensaje();
             }
         }
         
+    }
+
+    public static function ActualizarComanda($demora, $id_mesa)
+    {
+        try {
+            $db = conectar();
+
+            $consulta = "UPDATE comandas SET demora = :demora WHERE id_mesa = :id_mesa";
+            $datos = $db->prepare($consulta);
+            $datos->bindParam(':demora', $demora);
+            $datos->bindParam(':id_mesa', $id_mesa);
+            $datos->execute();
+
+            if ($datos->rowCount() > 0) {
+                return "La demora ha sido actualizada correctamente.";
+            } else {
+                return "No se encontró ninguna comanda con el id_mesa proporcionado.";
+            }
+
+        } catch (PDOException $e) {
+            return "Error en la base de datos: " . $e->getmensaje();
+        }
+    }
+
+    public static function obtenerMesaPorCodigoComanda($id_comanda)
+    {
+        try {
+            $db = conectar();
+
+
+            $consulta = "SELECT mesa FROM comanda_productos WHERE id_comanda = :id_comanda";
+            $datos = $db->prepare($consulta);
+            $datos->bindParam(':id_comanda', $id_comanda);
+            $datos->execute();
+
+            $resultado = $datos->fetch(PDO::FETCH_ASSOC);
+
+            if ($resultado) {
+                return $resultado['mesa'];
+            } else {
+                return null;
+            }
+
+        } catch (PDOException $e) {
+            echo "Error en la base de datos: " . $e->getmensaje();
+            return null;
+        }
+    }
+
+    public static function obtenerDemoraPorCodigoComanda($id_comanda)
+    {
+        try {
+            $db = conectar();
+
+
+            $consulta = "SELECT demora FROM comanda_productos WHERE id_comanda = :id_comanda";
+            $datos = $db->prepare($consulta);
+            $datos->bindParam(':id_comanda', $id_comanda);
+            $datos->execute();
+
+            $resultado = $datos->fetch(PDO::FETCH_ASSOC);
+
+            if ($resultado) {
+                return $resultado['demora'];
+            } else {
+                return null;
+            }
+
+        } catch (PDOException $e) {
+            echo "Error en la base de datos: " . $e->getmensaje();
+            return null;
+        }
+    }
+
+    public static function restarDemoraPorIdMesa($demoraARestar, $id_mesa)
+    {
+        try 
+        {
+            $db = conectar();
+
+            $consultaSelect = "SELECT demora FROM comandas WHERE id_mesa = :id_mesa";
+            $datosSelect = $db->prepare($consultaSelect);
+            $datosSelect->bindParam(':id_mesa', $id_mesa);
+            $datosSelect->execute();
+
+            $resultado = $datosSelect->fetch(PDO::FETCH_ASSOC);
+
+            if ($resultado) 
+            {
+                $demoraActual = $resultado['demora'];
+                $nuevaDemora = $demoraActual - $demoraARestar;
+
+                if ($nuevaDemora < 0) 
+                {
+                    $nuevaDemora = 0;
+                }
+
+                $consultaUpdate = "UPDATE comandas SET demora = :nueva_demora WHERE id_mesa = :id_mesa";
+                $datosUpdate = $db->prepare($consultaUpdate);
+                $datosUpdate->bindParam(':nueva_demora', $nuevaDemora);
+                $datosUpdate->bindParam(':id_mesa', $id_mesa);
+                $datosUpdate->execute();
+
+                if ($datosUpdate->rowCount() > 0) 
+                {
+                    return "La demora ha sido actualizada correctamente.";
+                } else 
+                {
+                    return "No se encontró ninguna comanda con el id_mesa proporcionado.";
+                }
+            }
+
+        } 
+        catch (PDOException $e) 
+        {
+            return "Error en la base de datos: " . $e->getmensaje();
+        }
     }
 
     public static function borrarOrden($id)

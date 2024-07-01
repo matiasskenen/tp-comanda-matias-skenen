@@ -100,7 +100,7 @@ class OrdenController extends Orden implements IApiUsable{
     {
         parse_str(file_get_contents("php://input"), $parametros);
 
-        if(isset($parametros['codigo_comanda']) && isset($parametros['estado']))
+        if(isset($parametros['codigo_comanda']) && isset($parametros['estado']) && isset($parametros['demora']))
         {
             $header = $request->getHeaderLine('authorization'); 
     
@@ -115,7 +115,20 @@ class OrdenController extends Orden implements IApiUsable{
                 
                 $data = AutenticacionJWT::ObtenerData($token);
                 $puesto = $data->tipo_usuario;
-                Orden::ModificarOrdenEstado($parametros['codigo_comanda'], $parametros['estado'], $puesto);
+                Orden::ModificarOrdenEstado($parametros['codigo_comanda'], $parametros['estado'], $puesto, $parametros['demora']);
+                $numeroMesaComanda = Orden::obtenerMesaPorCodigoComanda($parametros['codigo_comanda']);
+
+                if($parametros['estado'] == "lista")
+                {
+                    $demoraRestar = Orden::obtenerDemoraPorCodigoComanda($parametros['codigo_comanda']);
+                    Orden::restarDemoraPorIdMesa($demoraRestar, $numeroMesaComanda);
+
+                }else
+                {
+                    Orden::ActualizarComanda($parametros['demora'], $numeroMesaComanda);
+                }
+                
+
                 $mensaje = json_encode(array("mensaje" => "Orden Estado actualizada con exito"));        
             }
         }
