@@ -185,47 +185,18 @@ class ComandaController extends Comandas implements IApiUsable
     //Terminar
     public function BorrarUno($request, $response, $args)
     {
+        $parametros = $request->getParsedBody();
 
-        $header = $request->getHeaderLine('authorization'); 
-    
-        if(empty($header))
+        if(!isset($parametros['codigo_comanda']))
         {
-            $response->getBody()->write(json_encode(array("error" => "No se ingreso el token")));
-            $response = $response->withStatus(401);
+            $response->getBody()->write(json_encode(["error" => "Completa campos"]));
+            return $response->withHeader('Content-Type', 'application/json');
         }
         else
         {
-                $token = trim(explode("Bearer", $header)[1]);
-                
-                $data = AutenticacionJWT::ObtenerData($token);
-                $puesto = $data->tipo_usuario;
-                $nombre = $data->usuario;
-
-                if($puesto == "mesero" || $puesto == "socio")
-                {
-                    registrarOperacion($nombre, $puesto, "BorrarComanda", $response);
-
-                    $id_comanda = $args['id_comanda'];
-
-                    if(!isset($id_comanda) || empty($estado)){
-                       
-                        $mensaje = json_encode(array("mensaje" => "Datos invalidos"));
-                    }
-                    else{
-                        Comandas::borrarComanda($id_comanda);
-                        $mensaje = json_encode(array("mensaje" => "Comanda borrada con exito"));
-                    }
-            
-                    $response->getBody()->write($mensaje);
-                    return $response->withHeader('Content-Type', 'application/json');
-                }
-                else
-                {
-                    $response->getBody()->write(json_encode(array("error" => "Tiene que ser mesero para registrar/Socio")));
-                    $response = $response->withStatus(401);
-                }
-
-
+            registrarOperacion("Matias", "Socio", "BorrarComanda", $response);
+            Comandas::borrarComanda($parametros['codigo_comanda'], $response);
+            return $response->withHeader('Content-Type', 'application/json');
         }
     }
 }

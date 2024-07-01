@@ -1,4 +1,5 @@
 <?php
+require_once '../db/conectarDB.php';
 class Mesas{
 
     public $mesas_Maximas = 5;
@@ -56,7 +57,7 @@ class Mesas{
         return $response->withHeader('Content-Type', 'application/json');
     }
 
-    public static function obtenerTodos()
+    public static function obtenerTodos($response)
     {
         $db = conectar();
     
@@ -77,28 +78,47 @@ class Mesas{
         return $response->withHeader('Content-Type', 'application/json');
     }
 
-    public static function borrarMesa($codigo_mesa)
+    public static function borrarMesa($codigo_mesa, $response)
     {
-        $db = conectar();
-        $consulta = "DELETE FROM mesas WHERE codigo_mesa = :codigo_mesa";
-        $consulta->bindValue(':codigo_mesa', $codigo_mesa);
-        $consulta->execute();
+        try {
+            $db = conectar(); 
+            
+            $consulta = "DELETE FROM mesas WHERE codigo_mesa = :codigo_mesa";
+            $datos = $db->prepare($consulta);
+            $datos->bindParam(':codigo_mesa', $codgio_mesa);
+            $datos->execute();
+
+            $rowCount = $datos->rowCount(); // numero de filas afectadas
+            
+            if ($rowCount > 0) {
+
+                $response->getBody()->write(json_encode(["mensaje" => "Mesa eliminado correctamente."]));
+                return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+            } else {
+                $response->getBody()->write(json_encode(["mensaje" => "No se encontró ningún Mesa"]));
+                return $response->withHeader('Content-Type', 'application/json')->withStatus(404);
+            }
+            
+        } catch (PDOException $e) {
+            $response->getBody()->write(json_encode(["error" => "Error en la base de datos: " . $e->getMessage()]));
+            return $response->withStatus(500)->withHeader('Content-Type', 'application/json');
+        }
+
     }
 
     public static function modificarMesa($id, $codigo_comanda, $estado, $max_comensales, $response)
     {
-        parse_str(file_get_contents("php://input"), $parametros);
         $db = conectar();
 
+        $estadoNuevo = self::mesaEstado($estado); 
+        $consulta = "UPDATE mesas SET estado = :estado, codigo_comanda = :codigo_comanda, max_comensales = :max_comensales WHERE codigo_mesa = :id";
 
-            $consulta = "UPDATE mesas SET estado = :estado, codigo_comanda = :codigo_comanda, max_comensales = :max_comensales WHERE codigo_mesa = :id";
-
-            $update = $db->prepare($consulta);
-            $update->bindParam(':estado', $parametros['estado']);
-            $update->bindParam(':codigo_comanda', $parametros['codigo_comanda']);
-            $update->bindParam(':max_comensales', $parametros['max_comensales']);
-            $update->bindParam(':id', $id);
-            $update->execute();
+        $update = $db->prepare($consulta);
+        $update->bindValue(':estado', $estadoNuevo);
+        $update->bindValue(':codigo_comanda', $codigo_comanda);
+        $update->bindValue(':max_comensales', $max_comensales);
+        $update->bindValue(':id', $id);
+        $update->execute();
     }
 
     public static function mesaEstado($valor)

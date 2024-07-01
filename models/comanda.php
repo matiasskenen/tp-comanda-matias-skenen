@@ -1,5 +1,5 @@
 <?php
-require_once 'menu.php';
+require_once '../db/conectarDB.php';
 class Comandas{
 
     public $codigo_comanda;
@@ -122,12 +122,32 @@ class Comandas{
         }
     }
 
-    public static function borrarComanda($id_comanda)
+    public static function borrarComanda($codigo_comanda, $response)
     {
-        $db = conectar();
-        $consulta = "DELETE FROM comandas WHERE id_comanda  = :id_comanda";
-        $consulta->bindValue(':id_comanda', $id_comanda);
-        $consulta->execute();
+        try {
+            echo $codigo_comanda;
+            $db = conectar(); 
+            
+            $consulta = "DELETE FROM comandas WHERE codigo_comanda = :codigo_comanda";
+            $datos = $db->prepare($consulta);
+            $datos->bindParam(':codigo_comanda', $codigo_comanda);
+            $datos->execute();
+
+            $rowCount = $datos->rowCount(); // numero de filas afectadas
+            
+            if ($rowCount > 0) {
+
+                $response->getBody()->write(json_encode(["mensaje" => "Comanda eliminado correctamente."]));
+                return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+            } else {
+                $response->getBody()->write(json_encode(["mensaje" => "No se encontró ningún Comanda"]));
+                return $response->withHeader('Content-Type', 'application/json')->withStatus(404);
+            }
+            
+        } catch (PDOException $e) {
+            $response->getBody()->write(json_encode(["error" => "Error en la base de datos: " . $e->getMessage()]));
+            return $response->withStatus(500)->withHeader('Content-Type', 'application/json');
+        }
     }
 
     public static function comandaEstado($valor)

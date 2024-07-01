@@ -80,6 +80,8 @@ $app->group('/mesas', function (RouteCollectorProxy $group) {
   $group->get('/{id}', \MesasController::class . ':TraerUno');
   $group->post('[/]', \MesasController::class . ':CargarUno');
   $group->put('/{id}', \MesasController::class . ':ModificarUno');
+  $group->delete('/borrar', \MesasController::class . ':BorrarUno')
+  ->add(\UsuariosMiddleware::class . ':VerificaAccesoSocio');
 });
 
 $app->group('/orden', function (RouteCollectorProxy $group) {
@@ -94,7 +96,9 @@ $app->group('/comanda', function (RouteCollectorProxy $group) {
   $group->get('[/]', \ComandaController::class . ':TraerTodos');  
   $group->get('/{id}', \ComandaController::class . ':TraerUno');  
   $group->post('[/]', \ComandaController::class . ':CargarUno');  
-  $group->put('/{id}', \ComandaController::class . ':ModificarUno');   
+  $group->put('/{id}', \ComandaController::class . ':ModificarUno');
+  $group->delete('/borrar', \ComandaController::class . ':BorrarUno')
+  ->add(\UsuariosMiddleware::class . ':VerificaAccesoSocio');   
 });
 
 $app->group('/empleados', function (RouteCollectorProxy $group) {

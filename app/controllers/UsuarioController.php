@@ -107,11 +107,6 @@ class UsuarioController extends Usuario implements IApiUsable
             Usuario::borrarUsuario($parametros['usuario'], $response);
             return $response->withHeader('Content-Type', 'application/json');
         }
-
- 
-
-        
-
     }
 
     public function LogIn($request, $response, $args)

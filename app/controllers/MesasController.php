@@ -49,7 +49,7 @@ class MesasController extends Mesas implements IApiUsable
 
     public function TraerTodos($request, $response, $args)
     {
-        $lista = Mesas::obtenerTodos();
+        $lista = Mesas::obtenerTodos($response);
         $mensaje = json_encode(array("lista mesas" => $lista));
 
         $response->getBody()->write($mensaje);
@@ -85,16 +85,18 @@ class MesasController extends Mesas implements IApiUsable
 
     public function BorrarUno($request, $response, $args)
     {
-        $codigo_mesa = $args['codigo_mesa'];
-        $mesa = Mesa::obtenerMesaCodigo($codigo_mesa);
+        $parametros = $request->getParsedBody();
 
-        if(!isset($codigo_mesa) || empty($mesa)){
-           
-            $mensaje = json_encode(array("mensaje" => "Datos invalidos"));
+        if(!isset($parametros['codigo_mesa']))
+        {
+            $response->getBody()->write(json_encode(["error" => "Completa campos"]));
+            return $response->withHeader('Content-Type', 'application/json');
         }
-        else{
-            Mesas::borrarMesa($codigo_mesa);
-            $mensaje = json_encode(array("mensaje" => "Mesa borrada con exito"));
+        else
+        {
+            registrarOperacion("Matias", "Socio", "BorrarMesa", $response);
+            Mesas::borrarMesa($parametros['codigo_mesa'], $response);
+            return $response->withHeader('Content-Type', 'application/json');
         }
 
         $response->getBody()->write($mensaje);
