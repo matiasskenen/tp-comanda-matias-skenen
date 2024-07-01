@@ -83,29 +83,32 @@ class Usuario{
         
     }
 
-    //CONVERTIR EL INDEX EN DELETE ESTA FUNCION Y ADAPTARLA CON SUS PROMPTS EN POSMAN. (FUNCIONA EN PUT)
-    public static function borrarUsuario($id, $response)
+    public static function borrarUsuario($usuario, $response)
     {
 
-        $db = conectar();
-        $consulta = "UPDATE usuarios SET fecha_salida = :fecha_salida, estado = :estado WHERE id_usuario = :id";
-        $fechaSalida = new DateTime();
-        $estado = 'Baja';
-
         try {
-            $update = $db->prepare($consulta);
-            $update->bindValue(':fecha_salida', $fechaSalida->format('d-m-Y'));
-            $update->bindValue(':estado', $estado);
-            $update->bindParam(':id', $id);
-            $update->execute();
-            $response->getBody()->write(json_encode(["mensaje" => "Usuario Eliminado exitosamente"]));
+            $db = conectar(); 
+            
+            $consulta = "DELETE FROM usuarios WHERE usuario = :usuario";
+            $datos = $db->prepare($consulta);
+            $datos->bindParam(':usuario', $usuario);
+            $datos->execute();
 
-        } catch (PDOException $exepcion) {
-            $error = ["error" => $exepcion->getmensaje()];
-            $response->getBody()->write(json_encode($error));
+            $rowCount = $datos->rowCount(); // numero de filas afectadas
+            
+            if ($rowCount > 0) {
+
+                $response->getBody()->write(json_encode(["mensaje" => "Usuario eliminado correctamente."]));
+                return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+            } else {
+                $response->getBody()->write(json_encode(["mensaje" => "No se encontró ningún usuario con el ID especificado."]));
+                return $response->withHeader('Content-Type', 'application/json')->withStatus(404);
+            }
+            
+        } catch (PDOException $e) {
+            $response->getBody()->write(json_encode(["error" => "Error en la base de datos: " . $e->getMessage()]));
+            return $response->withStatus(500)->withHeader('Content-Type', 'application/json');
         }
-
-        return $response->withHeader('Content-Type', 'application/json');
 
     }
 
@@ -194,13 +197,13 @@ class Usuario{
                      WHERE id_usuario = :id_usuario";
     
         try {
-            $stmt = $db->prepare($consulta);
+            $datos = $db->prepare($consulta);
             
-            $stmt->bindValue(':id_usuario', $id_usuario, PDO::PARAM_INT);
+            $datos->bindValue(':id_usuario', $id_usuario, PDO::PARAM_INT);
             
-            $stmt->execute();
+            $datos->execute();
     
-            return $stmt->fetchObject('Usuario');
+            return $datos->fetchObject('Usuario');
             
         } catch (PDOException $ex) {
             $error = ["error" => $ex->getmensaje()];

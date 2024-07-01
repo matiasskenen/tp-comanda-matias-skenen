@@ -17,6 +17,7 @@ require_once './controllers/UsuarioController.php';
 require_once './controllers/MesasController.php';
 require_once './controllers/ComandaController.php';
 require_once './controllers/OrdenController.php';
+require_once './controllers/EmpleadosController.php';
 
 
 use Psr\Http\Message\ResponseInterface as Response;
@@ -64,7 +65,7 @@ $app->group('/usuarios', function (RouteCollectorProxy $group) {
   $group->put('/modificar', \UsuarioController::class . ':ModificarUno')
   ->add(\UsuariosMiddleware::class . ':VerificaAccesoSocio');
 
-  $group->delete('/borrar/{id}', \UsuarioController::class . ':BorrarUno')
+  $group->delete('/borrar', \UsuarioController::class . ':BorrarUno')
   ->add(\UsuariosMiddleware::class . ':VerificaAccesoSocio');
   
   /*
@@ -97,11 +98,15 @@ $app->group('/comanda', function (RouteCollectorProxy $group) {
 });
 
 $app->group('/empleados', function (RouteCollectorProxy $group) {
-  $group->get('[/]', \ComandaController::class . ':TraerTodos');  
-  $group->get('/{id}', \ComandaController::class . ':TraerUno');  
-  $group->post('[/]', \ComandaController::class . ':CargarUno');  
-  $group->put('/{id}', \ComandaController::class . ':ModificarUno');   
+  $group->get('/ingreso', \EmpleadosController::class . ':TraerTodos')
+  ->add(\UsuariosMiddleware::class . ':VerificaAccesoSocio');
+  $group->get('/cantidad', \EmpleadosController::class . ':cantidadOp')
+  ->add(\UsuariosMiddleware::class . ':VerificaAccesoSocio');
+  $group->get('/sector', \EmpleadosController::class . ':OpSector')
+  ->add(\UsuariosMiddleware::class . ':VerificaAccesoSocio');   
+  
 });
+
 
 $app->get('[/]', function (Request $request, Response $response) {    
     $payload = json_encode(array("mensaje" => "Slim Framework 4 PHP"));

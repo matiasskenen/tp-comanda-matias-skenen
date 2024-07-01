@@ -95,48 +95,22 @@ class UsuarioController extends Usuario implements IApiUsable
 
     public function BorrarUno($request, $response, $args)
     {
-        $header = $request->getHeaderLine('authorization'); 
-    
-        if(empty($header))
+        $parametros = $request->getParsedBody();
+
+        if(!isset($parametros['usuario']))
         {
-            $response->getBody()->write(json_encode(array("error" => "No se ingreso el token")));
-            $response = $response->withStatus(401);
-        }
-        else
+            $response->getBody()->write(json_encode(["error" => "Completa campos"]));
+            return $response->withHeader('Content-Type', 'application/json');
+        }else
         {
-                $token = trim(explode("Bearer", $header)[1]);
-                
-                $data = AutenticacionJWT::ObtenerData($token);
-                $puesto = $data->tipo_usuario;
-                $nombre = $data->usuario;
-
-                if($puesto == "mesero" || $puesto == "socio")
-                {
-                    registrarOperacion($nombre, $puesto, "BorrarUsuario", $response);
-
-                    $id_comanda = $args['id_comanda'];
-
-                    if(!isset($id_comanda) || empty($estado)){
-                       
-                        $mensaje = json_encode(array("mensaje" => "Datos invalidos"));
-                    }
-                    else{
-                        Comandas::borrarComanda($id_comanda);
-                        $mensaje = json_encode(array("mensaje" => "Comanda borrada con exito"));
-                    }
-            
-                    $response->getBody()->write($mensaje);
-                    return $response->withHeader('Content-Type', 'application/json');
-                }
-                else
-                {
-                    $response->getBody()->write(json_encode(array("error" => "Tiene que ser mesero para registrar/Socio")));
-                    $response = $response->withStatus(401);
-                }
-
-
+            registrarOperacion("Matias", "Socio", "BorrarUsuario", $response);
+            Usuario::borrarUsuario($parametros['usuario'], $response);
+            return $response->withHeader('Content-Type', 'application/json');
         }
 
+ 
+
+        
 
     }
 
