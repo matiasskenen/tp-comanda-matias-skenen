@@ -1,0 +1,1047 @@
+{
+	"info": {
+		"_postman_id": "5cdef5f7-3057-4574-abf1-8ebdff4e03b4",
+		"name": "API-comanda-TP",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34240875"
+	},
+	"item": [
+		{
+			"name": "LOGIN",
+			"item": [
+				{
+					"name": "USUARIOS LOGIN TOKEN",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "usuario",
+									"value": "matiassk1",
+									"type": "text"
+								},
+								{
+									"key": "puesto",
+									"value": "cocinero",
+									"type": "text"
+								},
+								{
+									"key": "clave",
+									"value": "matias12344",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:666/usuarios/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "666",
+							"path": [
+								"usuarios",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SOCIOS LOGIN TOKEN",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "usuario",
+									"value": "matiasSocio",
+									"type": "text"
+								},
+								{
+									"key": "puesto",
+									"value": "socio",
+									"type": "text"
+								},
+								{
+									"key": "clave",
+									"value": "matias1234",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:666/usuarios/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "666",
+							"path": [
+								"usuarios",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "AGREGAR",
+			"item": [
+				{
+					"name": "CSV",
+					"item": [
+						{
+							"name": "POST CSV",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MTk4NTk5NDYsImV4cCI6MTcxOTkxOTk0NiwiZGF0YSI6eyJ1c3VhcmlvIjoibWF0aWFzU29jaW8iLCJ0aXBvX3VzdWFyaW8iOiJzb2NpbyJ9LCJhcHAiOiJMYSBDb21hbmRhIC0gSkMifQ.QRZrjkn1nv2hMzEaUScfMX853MEplZjqZMId7XtXjOY",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "usuario",
+											"value": "matiasestudar",
+											"type": "text"
+										},
+										{
+											"key": "mail",
+											"value": "matias.skenen@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "clave",
+											"value": "matias1234",
+											"type": "text"
+										},
+										{
+											"key": "puesto",
+											"value": "cocinero",
+											"type": "text"
+										},
+										{
+											"key": "estado",
+											"value": "nada",
+											"type": "text"
+										},
+										{
+											"key": "fecha_ingreso",
+											"value": "20-4-2004",
+											"type": "text"
+										},
+										{
+											"key": "fecha_salida",
+											"value": "20-4-2004",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:666/usuarios/alta",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "666",
+									"path": [
+										"usuarios",
+										"alta"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "POST CSV",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MTk4NTk5NDYsImV4cCI6MTcxOTkxOTk0NiwiZGF0YSI6eyJ1c3VhcmlvIjoibWF0aWFzU29jaW8iLCJ0aXBvX3VzdWFyaW8iOiJzb2NpbyJ9LCJhcHAiOiJMYSBDb21hbmRhIC0gSkMifQ.QRZrjkn1nv2hMzEaUScfMX853MEplZjqZMId7XtXjOY",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "usuario",
+											"value": "matiasestudar",
+											"type": "text"
+										},
+										{
+											"key": "mail",
+											"value": "matias.skenen@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "clave",
+											"value": "matias1234",
+											"type": "text"
+										},
+										{
+											"key": "puesto",
+											"value": "cocinero",
+											"type": "text"
+										},
+										{
+											"key": "estado",
+											"value": "nada",
+											"type": "text"
+										},
+										{
+											"key": "fecha_ingreso",
+											"value": "20-4-2004",
+											"type": "text"
+										},
+										{
+											"key": "fecha_salida",
+											"value": "20-4-2004",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:666/usuarios/alta",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "666",
+									"path": [
+										"usuarios",
+										"alta"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "POST USUARIOS",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MTk4NTk5NDYsImV4cCI6MTcxOTkxOTk0NiwiZGF0YSI6eyJ1c3VhcmlvIjoibWF0aWFzU29jaW8iLCJ0aXBvX3VzdWFyaW8iOiJzb2NpbyJ9LCJhcHAiOiJMYSBDb21hbmRhIC0gSkMifQ.QRZrjkn1nv2hMzEaUScfMX853MEplZjqZMId7XtXjOY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "usuario",
+									"value": "matiasestudar",
+									"type": "text"
+								},
+								{
+									"key": "mail",
+									"value": "matias.skenen@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "clave",
+									"value": "matias1234",
+									"type": "text"
+								},
+								{
+									"key": "puesto",
+									"value": "cocinero",
+									"type": "text"
+								},
+								{
+									"key": "estado",
+									"value": "nada",
+									"type": "text"
+								},
+								{
+									"key": "fecha_ingreso",
+									"value": "20-4-2004",
+									"type": "text"
+								},
+								{
+									"key": "fecha_salida",
+									"value": "20-4-2004",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:666/usuarios/alta",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "666",
+							"path": [
+								"usuarios",
+								"alta"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST PEDIDO/COMANDA",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MTk4NDkyNDAsImV4cCI6MTcxOTkwOTI0MCwiZGF0YSI6eyJ1c3VhcmlvIjoibWF0aWFzU29jaW8iLCJ0aXBvX3VzdWFyaW8iOiJzb2NpbyJ9LCJhcHAiOiJMYSBDb21hbmRhIC0gSkMifQ.uA1f4Jl3NXQg90EcVI8gfsu0vU-TBafWA8tjOSexTMA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "id_mesa",
+									"value": "3",
+									"type": "text"
+								},
+								{
+									"key": "cliente",
+									"value": "matias",
+									"type": "text"
+								},
+								{
+									"key": "estado",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "productos",
+									"value": "[\n    {\"id\": 1, \"cantidad\": 3},\n    {\"id\": 2, \"cantidad\": 3}\n]",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:666/comanda",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "666",
+							"path": [
+								"comanda"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST MESAS",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "max_comensales",
+									"value": "6",
+									"type": "text"
+								},
+								{
+									"key": "codigo_comanda",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "estado",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "mozo",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "foto",
+									"value": "lucas",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:666/mesas",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "666",
+							"path": [
+								"mesas"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CONSULTAR (GET)",
+			"item": [
+				{
+					"name": "EMPLEADOS",
+					"item": [
+						{
+							"name": "GET USUARIOS INGRESOS",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MTk4NDkyNDAsImV4cCI6MTcxOTkwOTI0MCwiZGF0YSI6eyJ1c3VhcmlvIjoibWF0aWFzU29jaW8iLCJ0aXBvX3VzdWFyaW8iOiJzb2NpbyJ9LCJhcHAiOiJMYSBDb21hbmRhIC0gSkMifQ.uA1f4Jl3NXQg90EcVI8gfsu0vU-TBafWA8tjOSexTMA",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:666/empleados/ingreso",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "666",
+									"path": [
+										"empleados",
+										"ingreso"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET USUARIOS INGRESOS Copy",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MTk4NDkyNDAsImV4cCI6MTcxOTkwOTI0MCwiZGF0YSI6eyJ1c3VhcmlvIjoibWF0aWFzU29jaW8iLCJ0aXBvX3VzdWFyaW8iOiJzb2NpbyJ9LCJhcHAiOiJMYSBDb21hbmRhIC0gSkMifQ.uA1f4Jl3NXQg90EcVI8gfsu0vU-TBafWA8tjOSexTMA",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:666/empleados/cantidad?operacion=login",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "666",
+									"path": [
+										"empleados",
+										"cantidad"
+									],
+									"query": [
+										{
+											"key": "operacion",
+											"value": "login"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET SECTOR/EMPLEADO",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MTk4NDkyNDAsImV4cCI6MTcxOTkwOTI0MCwiZGF0YSI6eyJ1c3VhcmlvIjoibWF0aWFzU29jaW8iLCJ0aXBvX3VzdWFyaW8iOiJzb2NpbyJ9LCJhcHAiOiJMYSBDb21hbmRhIC0gSkMifQ.uA1f4Jl3NXQg90EcVI8gfsu0vU-TBafWA8tjOSexTMA",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:666/empleados/sector",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "666",
+									"path": [
+										"empleados",
+										"sector"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "New Folder",
+					"item": [
+						{
+							"name": "GET USUARIOS",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:666/usuarios",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "666",
+									"path": [
+										"usuarios"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET PEDIDOS/Socios",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MTk4NDkyNDAsImV4cCI6MTcxOTkwOTI0MCwiZGF0YSI6eyJ1c3VhcmlvIjoibWF0aWFzU29jaW8iLCJ0aXBvX3VzdWFyaW8iOiJzb2NpbyJ9LCJhcHAiOiJMYSBDb21hbmRhIC0gSkMifQ.uA1f4Jl3NXQg90EcVI8gfsu0vU-TBafWA8tjOSexTMA",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:666/comanda",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "666",
+									"path": [
+										"comanda"
+									],
+									"query": [
+										{
+											"key": "codigo_comanda",
+											"value": "44565",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET PEDIDOS/Cliente Copy",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:666/comanda?codigo_comanda=44565",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "666",
+									"path": [
+										"comanda"
+									],
+									"query": [
+										{
+											"key": "codigo_comanda",
+											"value": "44565"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET MESAS",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:666/mesas",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "666",
+									"path": [
+										"mesas"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET PRODUCTOS/Orden",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Cocinero}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:666/orden",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "666",
+									"path": [
+										"orden"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "MODIFICAR",
+			"item": [
+				{
+					"name": "ORDEN/PRODUCTOS",
+					"item": [
+						{
+							"name": "ORDEN MODIFICAR LISTA",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MTk4NDY0MjYsImV4cCI6MTcxOTkwNjQyNiwiZGF0YSI6eyJ1c3VhcmlvIjoibWF0aWFzc2sxIiwidGlwb191c3VhcmlvIjoiY29jaW5lcm8ifSwiYXBwIjoiTGEgQ29tYW5kYSAtIEpDIn0.94UwkyP4Lhjiez-y6rj2L1zeocRp3_VQuCZDpXAyBdo",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "codigo_comanda",
+											"value": "20",
+											"type": "text"
+										},
+										{
+											"key": "estado",
+											"value": "lista",
+											"type": "text"
+										},
+										{
+											"key": "demora",
+											"value": "5",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:666/orden/modificarestado",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "666",
+									"path": [
+										"orden",
+										"modificarestado"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "ORDEN PEDIDO MODIFICAR Copy 2",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MTk3NjA2MDUsImV4cCI6MTcxOTgyMDYwNSwiZGF0YSI6eyJ1c3VhcmlvIjoibWF0aWFzc2siLCJ0aXBvX3VzdWFyaW8iOiJzb2NpbyJ9LCJhcHAiOiJMYSBDb21hbmRhIC0gSkMifQ.ssJgNgrb64jIhmBPyx_3CcDOdhBJ2VtoVYI7nAmOoYg",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "codigo_comanda",
+											"value": "20",
+											"type": "text"
+										},
+										{
+											"key": "estado",
+											"value": "preparando",
+											"type": "text"
+										},
+										{
+											"key": "demora",
+											"value": "5",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:666/orden/modificarestado",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "666",
+									"path": [
+										"orden",
+										"modificarestado"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "MESAS",
+					"item": [
+						{
+							"name": "MESAS MODIFICAR",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "max_comensales",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "estado",
+											"value": "2",
+											"type": "text"
+										},
+										{
+											"key": "codigo_comanda",
+											"value": "1",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:666/mesas/2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "666",
+									"path": [
+										"mesas",
+										"2"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "USUARIOS",
+					"item": [
+						{
+							"name": "USUARIOS MODIFICAR",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "usuario",
+											"value": "sas",
+											"type": "text"
+										},
+										{
+											"key": "estado",
+											"value": "bartender",
+											"type": "text"
+										},
+										{
+											"key": "clave",
+											"value": "matias12345",
+											"type": "text"
+										},
+										{
+											"key": "puesto",
+											"value": "bartender",
+											"type": "text"
+										},
+										{
+											"key": "credenciales",
+											"value": "admin",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:666/usuarios/7",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "666",
+									"path": [
+										"usuarios",
+										"7"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "COMANDA",
+					"item": [
+						{
+							"name": "PEDIDOS MODIFICAR",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MTk4NDkyNDAsImV4cCI6MTcxOTkwOTI0MCwiZGF0YSI6eyJ1c3VhcmlvIjoibWF0aWFzU29jaW8iLCJ0aXBvX3VzdWFyaW8iOiJzb2NpbyJ9LCJhcHAiOiJMYSBDb21hbmRhIC0gSkMifQ.uA1f4Jl3NXQg90EcVI8gfsu0vU-TBafWA8tjOSexTMA",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "estado",
+											"value": "saca",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:666/comanda/3",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "666",
+									"path": [
+										"comanda",
+										"3"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "BORRAR",
+			"item": [
+				{
+					"name": "USUARIOS BORRAR",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MTk4NDkyNDAsImV4cCI6MTcxOTkwOTI0MCwiZGF0YSI6eyJ1c3VhcmlvIjoibWF0aWFzU29jaW8iLCJ0aXBvX3VzdWFyaW8iOiJzb2NpbyJ9LCJhcHAiOiJMYSBDb21hbmRhIC0gSkMifQ.uA1f4Jl3NXQg90EcVI8gfsu0vU-TBafWA8tjOSexTMA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "usuario",
+									"value": "matiasestudar",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:666/usuarios/borrar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "666",
+							"path": [
+								"usuarios",
+								"borrar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "COMANDA/PEDIDOS BORRAR Copy",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MTk4NDkyNDAsImV4cCI6MTcxOTkwOTI0MCwiZGF0YSI6eyJ1c3VhcmlvIjoibWF0aWFzU29jaW8iLCJ0aXBvX3VzdWFyaW8iOiJzb2NpbyJ9LCJhcHAiOiJMYSBDb21hbmRhIC0gSkMifQ.uA1f4Jl3NXQg90EcVI8gfsu0vU-TBafWA8tjOSexTMA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "codigo_comanda",
+									"value": "44565",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:666/comanda/borrar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "666",
+							"path": [
+								"comanda",
+								"borrar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MESAS BORRAR Copy 2",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MTk4NDkyNDAsImV4cCI6MTcxOTkwOTI0MCwiZGF0YSI6eyJ1c3VhcmlvIjoibWF0aWFzU29jaW8iLCJ0aXBvX3VzdWFyaW8iOiJzb2NpbyJ9LCJhcHAiOiJMYSBDb21hbmRhIC0gSkMifQ.uA1f4Jl3NXQg90EcVI8gfsu0vU-TBafWA8tjOSexTMA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "codigo_mesa",
+									"value": "2",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:666/mesas/borrar?codigo_mesa=2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "666",
+							"path": [
+								"mesas",
+								"borrar"
+							],
+							"query": [
+								{
+									"key": "codigo_mesa",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

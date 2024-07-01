@@ -12,10 +12,10 @@ class MesasController extends Mesas implements IApiUsable
         || !isset($parametros['codigo_comanda']) || empty($parametros["codigo_comanda"]) 
         || !isset($parametros['estado']) || empty($parametros["estado"]) 
         || !isset($parametros['mozo']) || empty($parametros["mozo"]) 
-        || !isset($parametros['foto']) || empty($parametros["foto"]))
+        || !isset($_FILES['imagen']))
         {
             
-            $response->getBody()->write(json_encode(["error" => "completar todos los campos [usuario][clave][tipo][nombre][apellido]"]));
+            $response->getBody()->write(json_encode(["error" => "completar todos los campos [max_comensales][codigo_comanda][estado][mozo][imagen]"]));
             return $response->withHeader('Content-Type', 'application/json');
             
         }
@@ -35,8 +35,8 @@ class MesasController extends Mesas implements IApiUsable
             $nuevaMesa->codigo_comanda = $parametros['codigo_comanda'];
             $nuevaMesa->estado = $parametros['estado'];
             $nuevaMesa->mozo = $parametros['mozo'];
-            $nuevaMesa->foto = $parametros['foto']; 
             $nuevaMesa->crearMesa($response);
+            Mesas::ingresarVentaImagen($parametros['mozo'], $response);
 
         }
         return $response->withHeader('Content-Type', 'application/json');

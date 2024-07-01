@@ -9,7 +9,6 @@ class Mesas{
     public $codigo_mesa;
     public $estado;
     public $mozo;
-    public $foto;
     public $fecha;
     public $id_puntuacion; 
 
@@ -33,8 +32,8 @@ class Mesas{
         $fecha = new DateTime();
         $this->estado = self::mesaEstado($this->estado);
 
-        $insert = "INSERT INTO mesas (max_comensales, codigo_comanda, estado, mozo, foto, fecha) 
-            VALUES (:max_comensales, :codigo_comanda, :estado, :mozo, :foto, :fecha)";
+        $insert = "INSERT INTO mesas (max_comensales, codigo_comanda, estado, mozo, fecha) 
+            VALUES (:max_comensales, :codigo_comanda, :estado, :mozo, :fecha)";
 
             try {
                 $consulta = $db->prepare($insert);
@@ -42,7 +41,6 @@ class Mesas{
                 $consulta->bindValue(':codigo_comanda', $this->codigo_comanda);
                 $consulta->bindValue(':estado', $this->estado);
                 $consulta->bindValue(':mozo', $this->mozo);
-                $consulta->bindValue(':foto', $this->foto);
                 $consulta->bindValue(':fecha', $fecha->format('d-m-Y'));
                 $consulta->execute();
                 $response->getBody()->write(json_encode(["mensaje" => "Mesa agregada exitosamente"]));
@@ -136,6 +134,25 @@ class Mesas{
             default:
                 return 'error';
     
+        }
+    }
+
+    public static function ingresarVentaImagen($nombre, $response)
+    {
+        $nombre_archivo = $_FILES['imagen']['name'];
+        $ubicacionTemporal = $_FILES['imagen']['tmp_name'];
+        $carpetaDestino = '../ImagenesMesa/2024/';
+    
+        $fechaVenta = date('Y-m-d');
+        $nuevo_nombre_archivo = $nombre . '.' . $fechaVenta . '.' . $nombre_archivo;
+        $rutaDestino = $carpetaDestino . $nuevo_nombre_archivo;
+    
+        if (move_uploaded_file($ubicacionTemporal, $rutaDestino)) {
+            $response->getBody()->write(json_encode(["mensaje" => "Imagen ingresada correctamente."]));
+            return $response->withHeader('Content-Type', 'application/json');
+        } else {
+            $response->getBody()->write(json_encode(["error" => "Imagen NO ingresada."]));
+            return $response->withHeader('Content-Type', 'application/json');
         }
     }
 

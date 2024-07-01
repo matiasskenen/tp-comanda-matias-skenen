@@ -164,7 +164,6 @@ class UsuarioController extends Usuario implements IApiUsable
     
     }
     
-
     public function DescargarCSV($request, $response, $args)
     {
     
