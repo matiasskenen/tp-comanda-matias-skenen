@@ -90,8 +90,14 @@ $app->group('/orden', function (RouteCollectorProxy $group) {
 });
 
 $app->group('/comanda', function (RouteCollectorProxy $group) {
-  $group->get('[/]', \ComandaController::class . ':TraerTodos');
-  $group->get('/productos', \ComandaController::class . ':TraerTodos');    
+  $group->get('[/]', \ComandaController::class . ':TraerTodos');  
+  $group->get('/{id}', \ComandaController::class . ':TraerUno');  
+  $group->post('[/]', \ComandaController::class . ':CargarUno');  
+  $group->put('/{id}', \ComandaController::class . ':ModificarUno');   
+});
+
+$app->group('/empleados', function (RouteCollectorProxy $group) {
+  $group->get('[/]', \ComandaController::class . ':TraerTodos');  
   $group->get('/{id}', \ComandaController::class . ':TraerUno');  
   $group->post('[/]', \ComandaController::class . ':CargarUno');  
   $group->put('/{id}', \ComandaController::class . ':ModificarUno');   

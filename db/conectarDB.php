@@ -112,4 +112,51 @@ function pedidoExiste($id_mesa, $producto, $cantidad, $db)
     return $datos->fetchColumn() > 0;
 }
 
+function registrarOperacion($nombre, $puesto, $operacion, $response) {
+
+        $db = conectar();
+        
+        $fecha_ingreso = date('Y-m-d H:i:s');
+        
+        // Verificar si ya existe una operación similar
+        $consultaExistencia = "SELECT id_operacion, cantidad FROM operaciones 
+                               WHERE nombre = :nombre AND puesto = :puesto AND operacion = :operacion";
+        
+        $stmtExistencia = $db->prepare($consultaExistencia);
+        $stmtExistencia->bindParam(':nombre', $nombre);
+        $stmtExistencia->bindParam(':puesto', $puesto);
+        $stmtExistencia->bindParam(':operacion', $operacion);
+        $stmtExistencia->execute();
+        
+        $resultadoExistencia = $stmtExistencia->fetch(PDO::FETCH_ASSOC);
+        
+        if ($resultadoExistencia) {
+            // Si la operación existe, incrementar la cantidad
+            $id_operacion = $resultadoExistencia['id_operacion'];
+            $cantidad = $resultadoExistencia['cantidad'] + 1;
+            
+            $actualizarCantidad = "UPDATE operaciones SET cantidad = :cantidad WHERE id_operacion = :id_operacion";
+            $stmtActualizar = $db->prepare($actualizarCantidad);
+            $stmtActualizar->bindParam(':cantidad', $cantidad);
+            $stmtActualizar->bindParam(':id_operacion', $id_operacion);
+            $stmtActualizar->execute();
+            
+
+        } else {
+            // Si la operación no existe, insertar una nueva
+            $consulta = "INSERT INTO operaciones (nombre, puesto, operacion, fecha_ingreso, cantidad) 
+                         VALUES (:nombre, :puesto, :operacion, :fecha_ingreso, 1)";
+            
+            $stmt = $db->prepare($consulta);
+            $stmt->bindParam(':nombre', $nombre);
+            $stmt->bindParam(':puesto', $puesto);
+            $stmt->bindParam(':operacion', $operacion);
+            $stmt->bindParam(':fecha_ingreso', $fecha_ingreso);
+            $stmt->execute();
+            
+
+        }
+        
+
+}
 ?>

@@ -9,10 +9,11 @@ class OrdenController extends Orden implements IApiUsable{
     {
         $parametros = $request->getParsedBody();
 
+        registrarOperacion($parametros['usuario'], $parametros['puesto'], "Modificar", $response);
+
         if(isset($parametros['codigo_comanda']) && isset($parametros['pedido']))
         {
             
-            //$comanda = Comanda::obtenerComandaCodigo($parametros['codigo_comanda']);
             $menuValidate = Menu::verificarMenu($parametros['pedido']);
 
             if($menuValidate != 'error' && !empty($parametros['pedido']))

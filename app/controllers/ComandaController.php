@@ -23,20 +23,51 @@ class ComandaController extends Comandas implements IApiUsable
         }
         else
         {
+            
             if (comandaExiste($parametros['id_mesa'], $parametros['cliente']))
             {
                 $response->getBody()->write(json_encode(["error" => "La comanda ya existe en la base de datos"]));
                 return $response->withHeader('Content-Type', 'application/json');
             }
 
-            $fecha = new DateTime();
-            $nuevoUsuario = new Comandas();
-            $nuevoUsuario->id_mesa = $parametros['id_mesa'];
-            $nuevoUsuario->cliente = $parametros['cliente'];
-            $nuevoUsuario->estado = $parametros['estado'];
-            $nuevoUsuario->productos = $parametros['productos'];
-            $nuevoUsuario->fecha = $fecha->format('d-m-Y'); 
-            $nuevoUsuario->crearComanda($response);
+            $header = $request->getHeaderLine('authorization'); 
+    
+            if(empty($header))
+            {
+                $response->getBody()->write(json_encode(array("error" => "No se ingreso el token")));
+                $response = $response->withStatus(401);
+            }
+            else
+            {
+                $token = trim(explode("Bearer", $header)[1]);
+                
+                $data = AutenticacionJWT::ObtenerData($token);
+                $puesto = $data->tipo_usuario;
+                $nombre = $data->usuario;
+
+                if($puesto == "mesero" || $puesto == "socio")
+                {
+                    registrarOperacion($nombre, $puesto, "CargarComanda", $response);
+
+                    $fecha = new DateTime();
+                    $nuevoUsuario = new Comandas();
+                    $nuevoUsuario->id_mesa = $parametros['id_mesa'];
+                    $nuevoUsuario->cliente = $parametros['cliente'];
+                    $nuevoUsuario->estado = $parametros['estado'];
+                    $nuevoUsuario->productos = $parametros['productos'];
+                    $nuevoUsuario->fecha = $fecha->format('d-m-Y'); 
+                    $nuevoUsuario->crearComanda($response);
+                }
+                else
+                {
+                    $response->getBody()->write(json_encode(array("error" => "Tiene que ser mesero para registrar/Socio")));
+                    $response = $response->withStatus(401);
+                }
+
+
+            }
+
+
 
         }
 
@@ -101,42 +132,101 @@ class ComandaController extends Comandas implements IApiUsable
     
     public function ModificarUno($request, $response, $args)
     {
-        $id = $args['id'];
-        parse_str(file_get_contents("php://input"), $parametros);
-
-        if (!isset($parametros["estado"]) || empty($parametros["estado"]))
+        $header = $request->getHeaderLine('authorization'); 
+    
+        if(empty($header))
         {
-            $response->getBody()->write(json_encode(["error" => "Completar [estado]"]));
-            return $response->withHeader('Content-Type', 'application/json');
-        } 
-        else 
+            $response->getBody()->write(json_encode(array("error" => "No se ingreso el token")));
+            $response = $response->withStatus(401);
+        }
+        else
         {
-            $db = conectar();
+                $token = trim(explode("Bearer", $header)[1]);
+                
+                $data = AutenticacionJWT::ObtenerData($token);
+                $puesto = $data->tipo_usuario;
+                $nombre = $data->usuario;
 
-            Comandas::modificarComanda($id, $parametros['estado']);
-            $mensaje = json_encode(array("mensaje" => "Estado de Comanda modificado exitosamente"));
+                if($puesto == "mesero" || $puesto == "socio")
+                {
+                    registrarOperacion($nombre, $puesto, "ModificarComanda", $response);
+
+                    $id = $args['id'];
+                    parse_str(file_get_contents("php://input"), $parametros);
+        
+                    if (!isset($parametros["estado"]) || empty($parametros["estado"]))
+                    {
+                        $response->getBody()->write(json_encode(["error" => "Completar [estado]"]));
+                        return $response->withHeader('Content-Type', 'application/json');
+                    } 
+                    else 
+                    {
+                        $db = conectar();
+        
+                        Comandas::modificarComanda($id, $parametros['estado']);
+                        $mensaje = json_encode(array("mensaje" => "Estado de Comanda modificado exitosamente"));
+        
+                    }
+        
+                    $response->getBody()->write($mensaje);
+                }
+                else
+                {
+                    $response->getBody()->write(json_encode(array("error" => "Tiene que ser mesero para registrar/Socio")));
+                    $response = $response->withStatus(401);
+                }
+
 
         }
-
-        $response->getBody()->write($mensaje);
         return $response->withHeader('Content-Type', 'application/json');
     }
 
+
+    //Terminar
     public function BorrarUno($request, $response, $args)
     {
-        $id_comanda = $args['id_comanda'];
 
-        if(!isset($id_comanda) || empty($estado)){
-           
-            $mensaje = json_encode(array("mensaje" => "Datos invalidos"));
+        $header = $request->getHeaderLine('authorization'); 
+    
+        if(empty($header))
+        {
+            $response->getBody()->write(json_encode(array("error" => "No se ingreso el token")));
+            $response = $response->withStatus(401);
         }
-        else{
-            Comandas::borrarComanda($id_comanda);
-            $mensaje = json_encode(array("mensaje" => "Comanda borrada con exito"));
-        }
+        else
+        {
+                $token = trim(explode("Bearer", $header)[1]);
+                
+                $data = AutenticacionJWT::ObtenerData($token);
+                $puesto = $data->tipo_usuario;
+                $nombre = $data->usuario;
 
-        $response->getBody()->write($mensaje);
-        return $response->withHeader('Content-Type', 'application/json');
+                if($puesto == "mesero" || $puesto == "socio")
+                {
+                    registrarOperacion($nombre, $puesto, "BorrarComanda", $response);
+
+                    $id_comanda = $args['id_comanda'];
+
+                    if(!isset($id_comanda) || empty($estado)){
+                       
+                        $mensaje = json_encode(array("mensaje" => "Datos invalidos"));
+                    }
+                    else{
+                        Comandas::borrarComanda($id_comanda);
+                        $mensaje = json_encode(array("mensaje" => "Comanda borrada con exito"));
+                    }
+            
+                    $response->getBody()->write($mensaje);
+                    return $response->withHeader('Content-Type', 'application/json');
+                }
+                else
+                {
+                    $response->getBody()->write(json_encode(array("error" => "Tiene que ser mesero para registrar/Socio")));
+                    $response = $response->withStatus(401);
+                }
+
+
+        }
     }
 }
 ?>

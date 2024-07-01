@@ -24,6 +24,7 @@ class UsuarioController extends Usuario implements IApiUsable
         }
         else
         {
+            registrarOperacion($parametros['usuario'], $parametros['puesto'], "Crear Usuario", $response);
             if (usuarioExiste($parametros['usuario'])) {
                 $response->getBody()->write(json_encode(["error" => "El usuario ya existe en la base de datos"]));
                 return $response->withHeader('Content-Type', 'application/json');
@@ -40,8 +41,12 @@ class UsuarioController extends Usuario implements IApiUsable
             $nuevoUsuario->fecha_salida = '---';
             $nuevoUsuario->crearUsuario($response);
 
+            
+
         }
+
         return $response->withHeader('Content-Type', 'application/json');
+
         
     }
 
@@ -57,6 +62,8 @@ class UsuarioController extends Usuario implements IApiUsable
         $response->getBody()->write($mensaje);
         return $response
           ->withHeader('Content-Type', 'application/json');
+
+        registrarOperacion($parametros['usuario'], $parametros['puesto'], "TraerUsuarios", $response);
     }
     
     public function ModificarUno($request, $response, $args)
@@ -81,17 +88,54 @@ class UsuarioController extends Usuario implements IApiUsable
 
         return $response->withHeader('Content-Type', 'application/json');
 
+        registrarOperacion($parametros['usuario'], $parametros['puesto'], "Modificar", $response);
+
 
     }
 
     public function BorrarUno($request, $response, $args)
     {
-        $id = $args['id'];
-        parse_str(file_get_contents("php://input"), $parametros);
+        $header = $request->getHeaderLine('authorization'); 
+    
+        if(empty($header))
+        {
+            $response->getBody()->write(json_encode(array("error" => "No se ingreso el token")));
+            $response = $response->withStatus(401);
+        }
+        else
+        {
+                $token = trim(explode("Bearer", $header)[1]);
+                
+                $data = AutenticacionJWT::ObtenerData($token);
+                $puesto = $data->tipo_usuario;
+                $nombre = $data->usuario;
 
-        Usuario::borrarUsuario($id, $response);
+                if($puesto == "mesero" || $puesto == "socio")
+                {
+                    registrarOperacion($nombre, $puesto, "BorrarUsuario", $response);
 
-        return $response->withHeader('Content-Type', 'application/json');
+                    $id_comanda = $args['id_comanda'];
+
+                    if(!isset($id_comanda) || empty($estado)){
+                       
+                        $mensaje = json_encode(array("mensaje" => "Datos invalidos"));
+                    }
+                    else{
+                        Comandas::borrarComanda($id_comanda);
+                        $mensaje = json_encode(array("mensaje" => "Comanda borrada con exito"));
+                    }
+            
+                    $response->getBody()->write($mensaje);
+                    return $response->withHeader('Content-Type', 'application/json');
+                }
+                else
+                {
+                    $response->getBody()->write(json_encode(array("error" => "Tiene que ser mesero para registrar/Socio")));
+                    $response = $response->withStatus(401);
+                }
+
+
+        }
 
 
     }
@@ -114,6 +158,8 @@ class UsuarioController extends Usuario implements IApiUsable
             return $response->withHeader('Content-Type', 'application/json');
         }
         
+        registrarOperacion($parametros['usuario'], $parametros['puesto'], "Login", $response);
+
         $datos = array("usuario" => $parametros['usuario'], "tipo_usuario" => $parametros['puesto']);
         try {
             $token = AutenticacionJWT::CrearToken($datos);
@@ -124,30 +170,60 @@ class UsuarioController extends Usuario implements IApiUsable
             return $response->withStatus(500)->withHeader('Content-Type', 'application/json'); // Internal Server Error
         }
 
+
+
     }
 
     public function GenerarCSV($request, $response, $args)
     {
-        try
+        $header = $request->getHeaderLine('authorization'); 
+    
+        if(empty($header))
         {
-            $lista = Usuario::obtenerTodos();
-            $archivo = fopen('./csv/usuarios.csv', 'w');
-
-            foreach($lista as $datos)
-            {
-                $fila = get_object_vars($datos);
-                fputcsv($archivo, $fila);
-            }
-            fclose($archivo);
-
-            $response->getBody()->write("Archivo guardado correctamente");
-            //Entregar csv repo
-            return $response->withHeader('Content-Type', 'application/json');
+            $response->getBody()->write(json_encode(array("error" => "No se ingreso el token")));
+            $response = $response->withStatus(401);
         }
-        catch(Exeption)
+        else
         {
-            $response->getBody()->write("Error al guardar");
-            return $response->withHeader('Content-Type', 'application/json');
+                $token = trim(explode("Bearer", $header)[1]);
+                
+                $data = AutenticacionJWT::ObtenerData($token);
+                $puesto = $data->tipo_usuario;
+                $nombre = $data->usuario;
+
+                if($puesto == "socio")
+                {
+                    registrarOperacion($nombre, $puesto, "DescargarCSV", $response);
+
+                    try
+                    {
+                        $lista = Usuario::obtenerTodos();
+                        $archivo = fopen('./csv/usuarios.csv', 'w');
+            
+                        foreach($lista as $datos)
+                        {
+                            $fila = get_object_vars($datos);
+                            fputcsv($archivo, $fila);
+                        }
+                        fclose($archivo);
+            
+                        $response->getBody()->write("Archivo guardado correctamente");
+                        //Entregar csv repo
+                        return $response->withHeader('Content-Type', 'application/json');
+                    }
+                    catch(Exeption)
+                    {
+                        $response->getBody()->write("Error al guardar");
+                        return $response->withHeader('Content-Type', 'application/json');
+                    }
+                }
+                else
+                {
+                    $response->getBody()->write(json_encode(array("error" => "Tiene que ser Socio para Descargar")));
+                    $response = $response->withStatus(401);
+                }
+
+
         }
     
     }
