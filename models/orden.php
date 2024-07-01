@@ -46,7 +46,7 @@ class Orden{
 
             return $response->withHeader('Content-Type', 'application/json');
     }
-
+    
     public static function obtenerTodos()
     {
         $db = conectar();
@@ -88,24 +88,52 @@ class Orden{
         }
     }
 
-    public static function ModificarOrdenEstado($codigo_comanda, $estado)
+    public static function ModificarOrdenEstado($id_comanda, $estado, $puesto)
     {
-        parse_str(file_get_contents("php://input"), $parametros);
+        if(!($puesto == "socio"))
+        {
+            try {
+                $db = conectar();
+                
+                // Ajuste de la consulta SQL
+                $consulta = "UPDATE comanda_productos SET estado = :estado WHERE id_comanda = :id_comanda AND puesto = :puesto";
         
-        try {
-            $db = conectar();
-            
-            $consulta = "UPDATE orden SET estado = :estado WHERE codigo_comanda = :codigo_comanda";
-    
-            $update = $db->prepare($consulta);
-            $update->bindParam(':estado', $parametros['estado']);
-            $update->bindParam(':codigo_comanda', $codigo_comanda);
-            $update->execute();
-        } catch (PDOException $e) {
-
-            echo "Error en la base de datos: " . $e->getMessage();
-
+                $update = $db->prepare($consulta);
+                // Vincular los parámetros correctamente
+                $update->bindParam(':estado', $estado);
+                $update->bindParam(':id_comanda', $id_comanda);
+                $update->bindParam(':puesto', $puesto);
+        
+                // Ejecutar la consulta
+                $update->execute();
+        
+            } catch (PDOException $e) {
+                // Manejar la excepción y mostrar un mensaje de error
+                echo "Error en la base de datos: " . $e->getMessage();
+            }
         }
+        else
+        {
+            try {
+                $db = conectar();
+                
+                // Ajuste de la consulta SQL
+                $consulta = "UPDATE comanda_productos SET estado = :estado WHERE id_comanda = :id_comanda";
+        
+                $update = $db->prepare($consulta);
+                // Vincular los parámetros correctamente
+                $update->bindParam(':estado', $estado);
+                $update->bindParam(':id_comanda', $id_comanda);
+        
+                // Ejecutar la consulta
+                $update->execute();
+        
+            } catch (PDOException $e) {
+                // Manejar la excepción y mostrar un mensaje de error
+                echo "Error en la base de datos: " . $e->getMessage();
+            }
+        }
+        
     }
 
     public static function borrarOrden($id)

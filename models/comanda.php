@@ -1,40 +1,75 @@
 <?php
+require_once 'menu.php';
 class Comandas{
 
     public $id_comanda;
     public $id_mesa;
     public $cliente;
-    public $precio;
     public $estado;
-    public $demora; 
+    public $productos;
+    public $cantidad;
+    public $demora = 0; 
     public $fecha;
+    public $precio = 0;
     
-    public function crearComanda($response)
-    {
+    public function crearComanda($response) {
         $db = conectar();
                 
         $fecha = new DateTime();
+        $this->estado = self::comandaEstado($this->estado);
+        if ($this->estado == "error") {
+            $response->getBody()->write(json_encode(["error" => "No existe el estado de Comanda ingresado"]));
+            return $response = $response->withStatus(401);
+        }
 
-        $insert = "INSERT INTO comandas (id_mesa, cliente, precio, estado, demora, fecha) 
-           VALUES (:id_mesa, :cliente, :precio, :estado, :demora, :fecha)";
+        // Insertar los productos de la comanda
+        $insertProductos = "INSERT INTO comanda_productos (mesa, id_producto, cantidad, estado, puesto) 
+                            VALUES (:mesa, :id_producto, :cantidad, :estado, :puesto)";
 
-            try {
-                $consulta = $db->prepare($insert);
-                $consulta->bindValue(':id_mesa', $this->id_mesa);
-                $consulta->bindValue(':cliente', $this->cliente);
-                $consulta->bindValue(':precio', $this->precio);
-                $consulta->bindValue(':estado', $this->estado);
-                $consulta->bindValue(':demora', $this->demora);
-                $consulta->bindValue(':fecha', $fecha->format('d-m-Y'));
-                $consulta->execute();
-                $response->getBody()->write(json_encode(["mensaje" => "Mesa agregada exitosamente"]));
+        $productosArray = json_decode($this->productos, true);
 
-            } catch (PDOException $exepcion) {
-                $error = array("error" => $exepcion->getMessage());
-                $response->getBody()->write(json_encode($error));
+        foreach ($productosArray as $producto) {
+            // Verificar si el producto existe
+            $puesto = self::comandaProductos($producto['id']);
+
+            // Verificar la cantidad del producto
+            if ($producto['cantidad'] <= 0) {
+                throw new Exception("Ingrese una cantidad válida para el Producto");
             }
 
-            return $response->withHeader('Content-Type', 'application/json');
+            // Insertar producto en la tabla comanda_productos
+            $consultaProductos = $db->prepare($insertProductos);
+            $consultaProductos->bindValue(':mesa', $this->id_mesa);
+            $consultaProductos->bindValue(':id_producto', $producto['id']);
+            $consultaProductos->bindValue(':cantidad', $producto['cantidad']);
+            $consultaProductos->bindValue(':estado', "Sin empezar");
+            $consultaProductos->bindValue(':puesto', $puesto);
+            $consultaProductos->execute();
+        }
+
+
+        $insertComanda = "INSERT INTO comandas (id_mesa, cliente, estado, demora, fecha, precio) 
+                          VALUES (:id_mesa, :cliente, :estado, :demora, :fecha, :precio)";
+        
+        try {
+            $consultaComanda = $db->prepare($insertComanda);
+            $consultaComanda->bindValue(':id_mesa', $this->id_mesa);
+            $consultaComanda->bindValue(':cliente', $this->cliente);
+            $consultaComanda->bindValue(':estado', $this->estado);
+            $consultaComanda->bindValue(':demora', $this->demora);
+            $consultaComanda->bindValue(':precio', $this->precio);
+            $consultaComanda->bindValue(':fecha', $fecha->format('Y-m-d'));
+            $consultaComanda->execute();
+            
+
+            $response->getBody()->write(json_encode(["mensaje" => "Comanda agregada exitosamente"]));
+
+        } catch (PDOException $exepcion) {
+            $error = array("error" => $exepcion->getMessage());
+            $response->getBody()->write(json_encode($error));
+        }
+
+        return $response->withHeader('Content-Type', 'application/json');
     }
     public static function obtenerTodos()
     {
@@ -92,14 +127,38 @@ class Comandas{
         {
             case 1:
                 return 'ingresada';
+                break;
             case 2:
                 return "en preparacion";
+                break;
             case 3:
                 return "lista para servir";
+                break;
             default:
                 return 'error';
+                break;
     
         }
+    }
+
+    public static function comandaProductos($valor)
+    {
+        $producto = Menu::verificarMenu($valor);
+        $puesto = Menu::puestoMenu($producto);
+        return $puesto;
+    }
+
+    public static function comandaPrecio($valor)
+    {
+        /*
+        foreach($valor as $comida)
+        {
+            if(Menu::verificarMenu($valor))
+            {
+                $precioTotal += Menu::valorMenu($valor);
+            }
+        }
+            */
     }
 
     public static function obtenerComandaCodigo($codigo_comanda)

@@ -7,7 +7,6 @@ class MesasController extends Mesas implements IApiUsable
 {
     public function CargarUno($request, $response, $args)
     {
-        $mesasMaximas = 5;
         $parametros = $request->getParsedBody();
         if (!isset($parametros['max_comensales']) || empty($parametros["max_comensales"]) 
         || !isset($parametros['codigo_comanda']) || empty($parametros["codigo_comanda"]) 
@@ -24,13 +23,11 @@ class MesasController extends Mesas implements IApiUsable
         {
             $db = conectar();
             
-            /*
-            VALIDAR MESA.
-            if (usuarioExiste($parametros['usuario'], $db)) {
+            if(mesasExiste($parametros['max_comensales'], $parametros['codigo_comanda']))
+            {
                 $response->getBody()->write(json_encode(["error" => "La mesa ya existe en la base de datos"]));
                 return $response->withHeader('Content-Type', 'application/json');
             }
-            */
 
             $fecha = new DateTime();
             $nuevaMesa = new Mesas();

@@ -32,7 +32,6 @@ ini_set('display_errors', 1);
 require __DIR__ . '/../vendor/autoload.php';
 require_once '../db/AccesoDatos.php';
 require_once "../db/conectarDB.php";
-// require_once './middlewares/Logger.php';
 
 /*// Load ENV
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
@@ -57,7 +56,6 @@ $app->group('/usuarios', function (RouteCollectorProxy $group) {
   $group->post('/login', \UsuarioController::class . ':LogIn'); // token
   $group->get('[/]', \UsuarioController::class . ':TraerTodos');
   $group->get('/{usuario}', \UsuarioController::class . ':TraerUno');
-
 
   //Socios
   $group->post('/alta', \UsuarioController::class . ':CargarUno')
@@ -92,7 +90,8 @@ $app->group('/orden', function (RouteCollectorProxy $group) {
 });
 
 $app->group('/comanda', function (RouteCollectorProxy $group) {
-  $group->get('[/]', \ComandaController::class . ':TraerTodos');  
+  $group->get('[/]', \ComandaController::class . ':TraerTodos');
+  $group->get('/productos', \ComandaController::class . ':TraerTodos');    
   $group->get('/{id}', \ComandaController::class . ':TraerUno');  
   $group->post('[/]', \ComandaController::class . ':CargarUno');  
   $group->put('/{id}', \ComandaController::class . ':ModificarUno');   

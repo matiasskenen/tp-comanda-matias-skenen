@@ -43,12 +43,23 @@ class OrdenController extends Orden implements IApiUsable{
 
     public function TraerTodos($request, $response, $args)
     {
-        $lista = Usuario::obtenerTodos();
-        $mensaje = json_encode(array("lista ordenes" => $lista));
+        $db = conectar();
 
-        $response->getBody()->write($mensaje);
-        return $response
-          ->withHeader('Content-Type', 'application/json');
+        $consulta = "SELECT * FROM comanda_productos";
+    
+        try
+        {
+            $insert = $db->query($consulta);
+            $usuarios = $insert->fetchAll(PDO::FETCH_ASSOC);
+            $response->getBody()->write(json_encode($usuarios));
+        }
+        catch (PDOException $exepcion)
+        {
+            $error = array("error" => $exepcion->getMessage());
+            $response->getBody()->write(json_encode($error));
+        }
+    
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public function TraerUno($request, $response, $args)
@@ -81,20 +92,32 @@ class OrdenController extends Orden implements IApiUsable{
         return $response->withHeader('Content-Type', 'application/json');
     }
 
-    public function ModificarEstado($request, $response)
+    public function ModificarEstado($request, $response, $args)
     {
         parse_str(file_get_contents("php://input"), $parametros);
 
         if(isset($parametros['codigo_comanda']) && isset($parametros['estado']))
         {
-            Orden::ModificarOrdenEstado($parametros['codigo_comanda'], $parametros['estado']);
-            $mensaje = json_encode(array("mensaje" => "Orden Estado actualizada con exito"));
+            $header = $request->getHeaderLine('authorization'); 
+    
+            if(empty($header)){
+                $response->getBody()->write(json_encode(array("error" => "No se ingreso el token")));
+                $response = $response->withStatus(401);
+            }
+            else{
+                $token = trim(explode("Bearer", $header)[1]);
+                
+                $data = AutenticacionJWT::ObtenerData($token);
+                $puesto = $data->tipo_usuario;
+                Orden::ModificarOrdenEstado($parametros['codigo_comanda'], $parametros['estado'], $puesto);
+                $mensaje = json_encode(array("mensaje" => "Orden Estado actualizada con exito"));        
+            }
         }
         else
         {
             $mensaje = json_encode(array("mensaje" => "Datos invalidos"));
         }
-        
+
         $response->getBody()->write($mensaje);
         return $response->withHeader('Content-Type', 'application/json');
     }
@@ -102,6 +125,7 @@ class OrdenController extends Orden implements IApiUsable{
     public function BorrarUno($request, $response, $args)
     { 
     }
+
 
 }
 

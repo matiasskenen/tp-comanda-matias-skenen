@@ -15,8 +15,7 @@ class UsuarioController extends Usuario implements IApiUsable
         || !isset($parametros['puesto']) || empty($parametros["puesto"]) 
         || !isset($parametros['estado']) || empty($parametros["estado"]) 
         || !isset($parametros['fecha_ingreso']) || empty($parametros["fecha_ingreso"])  
-        || !isset($parametros['fecha_salida']) || empty($parametros["fecha_salida"])  
-        || !isset($parametros['credenciales']) || empty($parametros["credenciales"])  )
+        || !isset($parametros['fecha_salida']) || empty($parametros["fecha_salida"]))
         {
             
             $response->getBody()->write(json_encode(["error" => "completar todos los campos [usuario][clave][tipo][nombre][apellido]"]));
@@ -25,19 +24,10 @@ class UsuarioController extends Usuario implements IApiUsable
         }
         else
         {
-            $db = conectar();
-    
-            if (usuarioExiste($parametros['usuario'], $db)) {
+            if (usuarioExiste($parametros['usuario'])) {
                 $response->getBody()->write(json_encode(["error" => "El usuario ya existe en la base de datos"]));
                 return $response->withHeader('Content-Type', 'application/json');
             }
-            /*
-            if(!(usuario::validarEstado($puesto, $estado)))
-            {
-                $response->getBody()->write(json_encode(["error" => "El puesto o El estado no existe"]));
-                return $response->withHeader('Content-Type', 'application/json');
-            }
-                */
 
             $fecha = new DateTime();
             $nuevoUsuario = new Usuario();
@@ -109,25 +99,31 @@ class UsuarioController extends Usuario implements IApiUsable
     public function LogIn($request, $response, $args)
     {   
         $parametros = $request->getParsedBody();
-    
-        if (isset($parametros['id_usuario']) && isset($parametros['nombre']) && isset($parametros['puesto'])) 
+        if (!isset($parametros['puesto']) || empty($parametros["puesto"]) 
+        || !isset($parametros['usuario']) || empty($parametros["usuario"]) 
+        || !isset($parametros['clave']) || empty($parametros["clave"]))
         {
-            $datos = array("usuario" => $parametros['nombre'], "tipo_usuario" => $parametros['puesto']);
-
-            try {
-                var_dump($datos);
-                $token = AutenticacionJWT::CrearToken($datos);
-                $response->getBody()->write(json_encode(array("token" => $token)));
-                return $response->withHeader('Content-Type', 'application/json');
-            } catch (Exception $e) {
-                $response->getBody()->write(json_encode(array("error" => "Error al generar el token: " . $e->getMessage())));
-                return $response->withStatus(500)->withHeader('Content-Type', 'application/json'); // Internal Server Error
-            }
-        } 
-        else {
-            $response->getBody()->write(json_encode(array("error" => "Los datos ingresados son invalidos")));
-            return $response->withStatus(400)->withHeader('Content-Type', 'application/json');
+            
+            $response->getBody()->write(json_encode(["error" => "completar todos los campos [usuario][clave][tipo][nombre][apellido]"]));
+            return $response->withHeader('Content-Type', 'application/json');
+            
         }
+        if(!(validarLogin($parametros['usuario'], $parametros['puesto'], $parametros['clave'])))
+        {
+            $response->getBody()->write(json_encode(["error" => "El usuario/Clave no son correctos"]));
+            return $response->withHeader('Content-Type', 'application/json');
+        }
+        
+        $datos = array("usuario" => $parametros['usuario'], "tipo_usuario" => $parametros['puesto']);
+        try {
+            $token = AutenticacionJWT::CrearToken($datos);
+            $response->getBody()->write(json_encode(array("token" => $token)));
+            return $response->withHeader('Content-Type', 'application/json');
+        } catch (Exception $e) {
+            $response->getBody()->write(json_encode(array("error" => "Error al generar el token: " . $e->getMessage())));
+            return $response->withStatus(500)->withHeader('Content-Type', 'application/json'); // Internal Server Error
+        }
+
     }
 
     public function GenerarCSV($request, $response, $args)

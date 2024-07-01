@@ -1,6 +1,7 @@
 <?php
 class Mesas{
 
+    public $mesas_Maximas = 5;
     public $id;
     public $codigo_comanda;
     public $max_comensales;
@@ -25,30 +26,34 @@ class Mesas{
 
     public function crearMesa($response)
     {
-                $db = conectar();
-                
-                $fecha = new DateTime();
 
-                $insert = "INSERT INTO mesas (max_comensales, codigo_comanda, estado, mozo, foto, fecha) 
-                   VALUES (:max_comensales, :codigo_comanda, :estado, :mozo, :foto, :fecha)";
+        $db = conectar();
+    
+        $fecha = new DateTime();
+        $this->estado = self::mesaEstado($this->estado);
 
-                    try {
-                        $consulta = $db->prepare($insert);
-                        $consulta->bindValue(':max_comensales', $this->max_comensales);
-                        $consulta->bindValue(':codigo_comanda', $this->codigo_comanda);
-                        $consulta->bindValue(':estado', $this->estado);
-                        $consulta->bindValue(':mozo', $this->mozo);
-                        $consulta->bindValue(':foto', $this->foto);
-                        $consulta->bindValue(':fecha', $fecha->format('d-m-Y'));
-                        $consulta->execute();
-                        $response->getBody()->write(json_encode(["mensaje" => "Mesa agregada exitosamente"]));
-        
-                    } catch (PDOException $exepcion) {
-                        $error = array("error" => $exepcion->getMessage());
-                        $response->getBody()->write(json_encode($error));
-                    }
-        
-                    return $response->withHeader('Content-Type', 'application/json');
+        $insert = "INSERT INTO mesas (max_comensales, codigo_comanda, estado, mozo, foto, fecha) 
+            VALUES (:max_comensales, :codigo_comanda, :estado, :mozo, :foto, :fecha)";
+
+            try {
+                $consulta = $db->prepare($insert);
+                $consulta->bindValue(':max_comensales', $this->max_comensales);
+                $consulta->bindValue(':codigo_comanda', $this->codigo_comanda);
+                $consulta->bindValue(':estado', $this->estado);
+                $consulta->bindValue(':mozo', $this->mozo);
+                $consulta->bindValue(':foto', $this->foto);
+                $consulta->bindValue(':fecha', $fecha->format('d-m-Y'));
+                $consulta->execute();
+                $response->getBody()->write(json_encode(["mensaje" => "Mesa agregada exitosamente"]));
+
+            } catch (PDOException $exepcion) {
+                $error = array("error" => $exepcion->getMessage());
+                $response->getBody()->write(json_encode($error));
+            }
+
+
+
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public static function obtenerTodos()

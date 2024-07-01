@@ -8,12 +8,11 @@ class ComandaController extends Comandas implements IApiUsable
 {
     public function CargarUno($request, $response, $args)
     {
+        
         $parametros = $request->getParsedBody();
         if (!isset($parametros['id_mesa']) || empty($parametros["id_mesa"]) 
         || !isset($parametros['cliente']) || empty($parametros["cliente"]) 
-        || !isset($parametros['precio']) || empty($parametros["precio"]) 
         || !isset($parametros['estado']) || empty($parametros["estado"]) 
-        || !isset($parametros['demora']) || empty($parametros["demora"]) 
         || !isset($parametros['productos']) || empty($parametros["productos"]))
         {
             
@@ -23,15 +22,18 @@ class ComandaController extends Comandas implements IApiUsable
         }
         else
         {
-            $db = conectar();
+            if (comandaExiste($parametros['id_mesa'], $parametros['cliente']))
+            {
+                $response->getBody()->write(json_encode(["error" => "La comanda ya existe en la base de datos"]));
+                return $response->withHeader('Content-Type', 'application/json');
+            }
 
             $fecha = new DateTime();
             $nuevoUsuario = new Comandas();
             $nuevoUsuario->id_mesa = $parametros['id_mesa'];
             $nuevoUsuario->cliente = $parametros['cliente'];
-            $nuevoUsuario->precio = $parametros['precio'];
             $nuevoUsuario->estado = $parametros['estado'];
-            $nuevoUsuario->demora = $parametros['demora'];
+            $nuevoUsuario->productos = $parametros['productos'];
             $nuevoUsuario->fecha = $fecha->format('d-m-Y'); 
             $nuevoUsuario->crearComanda($response);
 
@@ -48,23 +50,27 @@ class ComandaController extends Comandas implements IApiUsable
     public function TraerTodos($request, $response, $args)
     {
         $db = conectar();
-
-        $consulta = "SELECT * FROM pedidos";
     
-        try
-        {
+        $consulta = "SELECT * FROM comandas";
+    
+        try {
             $insert = $db->query($consulta);
             $usuarios = $insert->fetchAll(PDO::FETCH_ASSOC);
-            $response->getBody()->write(json_encode($usuarios));
-        }
-        catch (PDOException $exepcion)
-        {
-            $error = array("error" => $exepcion->getMessage());
+    
+            if (count($usuarios) > 0) {
+                $response->getBody()->write(json_encode($usuarios));
+            } else {
+                $message = array("message" => "No se encontraron registros en la tabla.");
+                $response->getBody()->write(json_encode($message));
+            }
+        } catch (PDOException $excepcion) {
+            $error = array("error" => $excepcion->getMessage());
             $response->getBody()->write(json_encode($error));
         }
     
         return $response->withHeader('Content-Type', 'application/json');
     }
+
     
     public function ModificarUno($request, $response, $args)
     {
