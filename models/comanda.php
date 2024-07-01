@@ -2,7 +2,7 @@
 require_once 'menu.php';
 class Comandas{
 
-    public $id_comanda;
+    public $codigo_comanda;
     public $id_mesa;
     public $cliente;
     public $estado;
@@ -12,7 +12,8 @@ class Comandas{
     public $fecha;
     public $precio = 0;
     
-    public function crearComanda($response) {
+    public function crearComanda($response) 
+    {
         $db = conectar();
                 
         $fecha = new DateTime();
@@ -21,6 +22,8 @@ class Comandas{
             $response->getBody()->write(json_encode(["error" => "No existe el estado de Comanda ingresado"]));
             return $response = $response->withStatus(401);
         }
+
+        $this->codigo_comanda = rand(10000, 99999);
 
         // Insertar los productos de la comanda
         $insertProductos = "INSERT INTO comanda_productos (mesa, id_producto, cantidad, estado, puesto) 
@@ -48,8 +51,8 @@ class Comandas{
         }
 
 
-        $insertComanda = "INSERT INTO comandas (id_mesa, cliente, estado, demora, fecha, precio) 
-                          VALUES (:id_mesa, :cliente, :estado, :demora, :fecha, :precio)";
+        $insertComanda = "INSERT INTO comandas (id_mesa, cliente, estado, demora, fecha, precio, codigo_comanda) 
+                          VALUES (:id_mesa, :cliente, :estado, :demora, :fecha, :precio, :codigo_comanda)";
         
         try {
             $consultaComanda = $db->prepare($insertComanda);
@@ -58,11 +61,12 @@ class Comandas{
             $consultaComanda->bindValue(':estado', $this->estado);
             $consultaComanda->bindValue(':demora', $this->demora);
             $consultaComanda->bindValue(':precio', $this->precio);
+            $consultaComanda->bindValue(':codigo_comanda', $this->codigo_comanda);
             $consultaComanda->bindValue(':fecha', $fecha->format('Y-m-d'));
             $consultaComanda->execute();
             
 
-            $response->getBody()->write(json_encode(["mensaje" => "Comanda agregada exitosamente"]));
+            $response->getBody()->write(json_encode(["mensaje" => "Comanda agregada exitosamente: Codigo = ". $this->$codigo_comanda]));
 
         } catch (PDOException $exepcion) {
             $error = array("error" => $exepcion->getMessage());
@@ -71,6 +75,7 @@ class Comandas{
 
         return $response->withHeader('Content-Type', 'application/json');
     }
+
     public static function obtenerTodos()
     {
         $db = conectar();

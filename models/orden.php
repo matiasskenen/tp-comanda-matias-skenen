@@ -47,21 +47,34 @@ class Orden{
             return $response->withHeader('Content-Type', 'application/json');
     }
     
-    public static function obtenerTodos()
+    public static function obtenerTodos($puesto, $response)
     {
         $db = conectar();
     
-        $consulta = "SELECT * FROM orden";
-    
-        try
-        {
-            $insert = $db->query($consulta);
-            $usuarios = $insert->fetchAll(PDO::FETCH_ASSOC);
-            $response->getBody()->write(json_encode($usuarios));
+        if ($puesto !== "socio") {
+            $consulta = "SELECT * FROM comanda_productos WHERE puesto = :puesto";
+        } else {
+            $consulta = "SELECT * FROM comanda_productos";
         }
-        catch (PDOException $exepcion)
-        {
-            $error = array("error" => $exepcion->getMessage());
+    
+        try {
+            $stmt = $db->prepare($consulta);
+    
+            if ($puesto !== "socio") {
+                $stmt->bindParam(':puesto', $puesto, PDO::PARAM_STR);
+            }
+    
+            $stmt->execute();
+    
+            $ordenes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+            if ($ordenes) {
+                $response->getBody()->write(json_encode($ordenes));
+            } else {
+                $response->getBody()->write(json_encode(array("message" => "No hay ordenes disponibles.")));
+            }
+        } catch (PDOException $excepcion) {
+            $error = array("error" => $excepcion->getMessage());
             $response->getBody()->write(json_encode($error));
         }
     

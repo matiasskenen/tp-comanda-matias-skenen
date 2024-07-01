@@ -43,21 +43,25 @@ class OrdenController extends Orden implements IApiUsable{
 
     public function TraerTodos($request, $response, $args)
     {
-        $db = conectar();
 
-        $consulta = "SELECT * FROM comanda_productos";
+        $header = $request->getHeaderLine('authorization'); 
     
-        try
+        if(empty($header))
         {
-            $insert = $db->query($consulta);
-            $usuarios = $insert->fetchAll(PDO::FETCH_ASSOC);
-            $response->getBody()->write(json_encode($usuarios));
+            $response->getBody()->write(json_encode(array("error" => "No se ingreso el token")));
+            $response = $response->withStatus(401);
         }
-        catch (PDOException $exepcion)
+        else
         {
-            $error = array("error" => $exepcion->getMessage());
-            $response->getBody()->write(json_encode($error));
+            $token = trim(explode("Bearer", $header)[1]);
+            
+            $data = AutenticacionJWT::ObtenerData($token);
+            $puesto = $data->tipo_usuario;
+            Orden::obtenerTodos($puesto, $response);
+            $mensaje = json_encode(array("mensaje" => "Orden Estado actualizada con exito"));        
         }
+
+        ;
     
         return $response->withHeader('Content-Type', 'application/json');
     }
@@ -100,11 +104,13 @@ class OrdenController extends Orden implements IApiUsable{
         {
             $header = $request->getHeaderLine('authorization'); 
     
-            if(empty($header)){
+            if(empty($header))
+            {
                 $response->getBody()->write(json_encode(array("error" => "No se ingreso el token")));
                 $response = $response->withStatus(401);
             }
-            else{
+            else
+            {
                 $token = trim(explode("Bearer", $header)[1]);
                 
                 $data = AutenticacionJWT::ObtenerData($token);
