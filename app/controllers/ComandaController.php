@@ -23,13 +23,6 @@ class ComandaController extends Comandas implements IApiUsable
         }
         else
         {
-            
-            if (comandaExiste($parametros['id_mesa'], $parametros['cliente']))
-            {
-                $response->getBody()->write(json_encode(["error" => "La comanda ya existe en la base de datos"]));
-                return $response->withHeader('Content-Type', 'application/json');
-            }
-
             $header = $request->getHeaderLine('authorization'); 
     
             if(empty($header))
@@ -47,6 +40,13 @@ class ComandaController extends Comandas implements IApiUsable
 
                 if($puesto == "mesero" || $puesto == "socio")
                 {
+                    if (comandaExiste($parametros['id_mesa'], $parametros['cliente']))
+                {
+                    $response->getBody()->write(json_encode(["error" => "La comanda ya existe en la base de datos"]));
+                    return $response->withHeader('Content-Type', 'application/json');
+                }
+
+
                     registrarOperacion($nombre, $puesto, "CargarComanda", $response);
 
                     $fecha = new DateTime();
@@ -97,6 +97,7 @@ class ComandaController extends Comandas implements IApiUsable
         }
         else
         {
+            // Si sos admin, Trae Todo
             $db = conectar();
 
             $token = trim(explode("Bearer", $header)[1]);
@@ -106,21 +107,20 @@ class ComandaController extends Comandas implements IApiUsable
             if($puesto == "socio")
             {
                 $consulta = "SELECT * FROM comandas";
-    
-                try {
-                    $insert = $db->query($consulta);
-                    $usuarios = $insert->fetchAll(PDO::FETCH_ASSOC);
-            
-                    if (count($usuarios) > 0) {
-                        $response->getBody()->write(json_encode($usuarios));
-                    } else {
-                        $mensaje = array("mensaje" => "No se encontraron registros en la tabla.");
-                        $response->getBody()->write(json_encode($mensaje));
-                    }
-                } catch (PDOException $excepcion) {
-                    $error = array("error" => $excepcion->getmensaje());
-                    $response->getBody()->write(json_encode($error));
+
+                $insert = $db->query($consulta);
+                $usuarios = $insert->fetchAll(PDO::FETCH_ASSOC);
+        
+                if (count($usuarios) > 0) 
+                {
+                    $response->getBody()->write(json_encode($usuarios));
+                } 
+                else 
+                {
+                    $mensaje = array("mensaje" => "No se encontraron registros en la tabla.");
+                    $response->getBody()->write(json_encode($mensaje));
                 }
+
             }
         }
             
@@ -129,7 +129,6 @@ class ComandaController extends Comandas implements IApiUsable
         return $response->withHeader('Content-Type', 'application/json');
     }
 
-    
     public function ModificarUno($request, $response, $args)
     {
         $header = $request->getHeaderLine('authorization'); 
@@ -161,14 +160,9 @@ class ComandaController extends Comandas implements IApiUsable
                     } 
                     else 
                     {
-                        $db = conectar();
-        
                         Comandas::modificarComanda($id, $parametros['estado']);
-                        $mensaje = json_encode(array("mensaje" => "Estado de Comanda modificado exitosamente"));
-        
                     }
         
-                    $response->getBody()->write($mensaje);
                 }
                 else
                 {
@@ -180,7 +174,6 @@ class ComandaController extends Comandas implements IApiUsable
         }
         return $response->withHeader('Content-Type', 'application/json');
     }
-
 
     //Terminar
     public function BorrarUno($request, $response, $args)

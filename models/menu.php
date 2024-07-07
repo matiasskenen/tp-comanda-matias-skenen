@@ -27,16 +27,16 @@ class Menu{
         switch($valor)
         {
             case '1':
-                return "hamburguesa";
+                return "milanesaacaballo";
             break;
             case '2':
-                return "empanadas";
+                return "hamburguesas";
             break;
             case '3':
-                return "coca-cola";
+                return "corona";
             break;
             case '4':
-                return "vino";
+                return "daikiri";
             break;
             default:
                 return false;
@@ -48,10 +48,16 @@ class Menu{
     {
         switch($valor)
         {
-            case 'hamburguesa':
+            case '1':
                 return 500;
             break;
-            case 'empanadas':
+            case '2':
+                return 300;
+            break;
+            case '3':
+                return 300;
+            break;
+            case '4':
                 return 300;
             break;
             default:
@@ -65,16 +71,16 @@ class Menu{
     {
         switch($valor)
         {
-            case 'hamburguesa':
+            case 'milanesaacaballo':
                 return "cocinero";
             break;
-            case "empanadas":
+            case "hamburguesas":
                 return "cocinero";
             break;
-            case "coca-cola":
-                return "mesero";
+            case "daikiri":
+                return "bartender";
             break;
-            case "vino":
+            case "corona":
                 return "cervezero";
             break;
             default:

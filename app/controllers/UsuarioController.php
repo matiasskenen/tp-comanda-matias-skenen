@@ -14,8 +14,7 @@ class UsuarioController extends Usuario implements IApiUsable
         || !isset($parametros['clave']) || empty($parametros["clave"]) 
         || !isset($parametros['puesto']) || empty($parametros["puesto"]) 
         || !isset($parametros['estado']) || empty($parametros["estado"]) 
-        || !isset($parametros['fecha_ingreso']) || empty($parametros["fecha_ingreso"])  
-        || !isset($parametros['fecha_salida']) || empty($parametros["fecha_salida"]))
+        || !isset($parametros['fecha_ingreso']) || empty($parametros["fecha_ingreso"]))
         {
             
             $response->getBody()->write(json_encode(["error" => "completar todos los campos [usuario][clave][tipo][nombre][apellido]"]));

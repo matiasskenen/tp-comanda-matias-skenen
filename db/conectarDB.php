@@ -87,16 +87,28 @@ function comandaExiste($id_mesa, $cliente)
     return $datos->fetchColumn() > 0;
 }
 
-function mesasExiste($max_comensales, $codigo_comanda)
+function mesasExiste($max_comensales, $numero_mesa)
 {
     $db = conectar();
 
-    $consulta = "SELECT COUNT(*) FROM mesas WHERE max_comensales = :max_comensales AND codigo_comanda = :codigo_comanda";
+    $consulta = "SELECT COUNT(*) FROM mesas WHERE max_comensales = :max_comensales AND numero_mesa = :numero_mesa";
     $datos = $db->prepare($consulta);
     $datos->bindParam(':max_comensales', $max_comensales);
-    $datos->bindParam(':codigo_comanda', $codigo_comanda);
+    $datos->bindParam(':numero_mesa', $numero_mesa);
     $datos->execute();
     
+    return $datos->fetchColumn() > 0;
+}
+
+function mozoExiste($nombre)
+{
+    $db = conectar();
+    $consulta = "SELECT COUNT(*) FROM usuarios WHERE puesto = :puesto AND usuario = :nombre";
+    $datos = $db->prepare($consulta);
+    $puesto = 'mesero';
+    $datos->bindParam(':puesto', $puesto);
+    $datos->bindParam(':nombre', $nombre);
+    $datos->execute();
     return $datos->fetchColumn() > 0;
 }
 
@@ -112,13 +124,25 @@ function pedidoExiste($id_mesa, $producto, $cantidad, $db)
     return $datos->fetchColumn() > 0;
 }
 
+function validarMesaPagada($numero_mesa)
+{
+    $db = conectar();
+    $consulta = "SELECT COUNT(*) FROM mesas WHERE estado = :estado AND numero_mesa = :numero_mesa";
+    $datos = $db->prepare($consulta);
+    $estado = 'pagada';
+    $datos->bindParam(':estado', $estado);
+    $datos->bindParam(':numero_mesa', $numero_mesa);
+    $datos->execute();
+    return $datos->fetchColumn() > 0;
+}
+
 function registrarOperacion($nombre, $puesto, $operacion, $response) {
 
         $db = conectar();
         
         $fecha_ingreso = date('Y-m-d H:i:s');
         
-        // Verificar si ya existe una operación similar
+
         $consultaExistencia = "SELECT id_operacion, cantidad FROM operaciones 
                                WHERE nombre = :nombre AND puesto = :puesto AND operacion = :operacion";
         
@@ -131,7 +155,6 @@ function registrarOperacion($nombre, $puesto, $operacion, $response) {
         $resultadoExistencia = $stmtExistencia->fetch(PDO::FETCH_ASSOC);
         
         if ($resultadoExistencia) {
-            // Si la operación existe, incrementar la cantidad
             $id_operacion = $resultadoExistencia['id_operacion'];
             $cantidad = $resultadoExistencia['cantidad'] + 1;
             
@@ -143,7 +166,6 @@ function registrarOperacion($nombre, $puesto, $operacion, $response) {
             
 
         } else {
-            // Si la operación no existe, insertar una nueva
             $consulta = "INSERT INTO operaciones (nombre, puesto, operacion, fecha_ingreso, cantidad) 
                          VALUES (:nombre, :puesto, :operacion, :fecha_ingreso, 1)";
             

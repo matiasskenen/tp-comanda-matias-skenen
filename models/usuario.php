@@ -226,14 +226,14 @@ class Usuario{
 
             while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) 
             {
-                $insert->bindValue(':usuario', $data[0], \PDO::PARAM_STR);
-                $insert->bindValue(':puesto', $data[1], \PDO::PARAM_STR);
-                $insert->bindValue(':clave', password_hash($data[2], PASSWORD_DEFAULT), \PDO::PARAM_STR); 
-                $insert->bindValue(':estado', $data[3], \PDO::PARAM_STR);
-                $insert->bindValue(':mail', $data[4], \PDO::PARAM_STR);
-                $insert->bindValue(':fecha_ingreso', $data[5], \PDO::PARAM_STR);
-                $insert->bindValue(':fecha_salida', $data[6], \PDO::PARAM_STR);
-                $insert->execute();
+                $insert->bindValue(':usuario', $data[0]);
+                $insert->bindValue(':puesto', $data[1]);
+                $insert->bindValue(':clave', password_hash($data[2], PASSWORD_DEFAULT)); 
+                $insert->bindValue(':estado', $data[3]);
+                $insert->bindValue(':mail', $data[4]);
+                $insert->bindValue(':fecha_ingreso', $data[5]);
+                $insert->bindValue(':fecha_salida', $data[6]);
+                $insert->execute(); 
             }
 
             $response->getBody()->write(json_encode(['Mensaje' => 'Datos ingresados']));

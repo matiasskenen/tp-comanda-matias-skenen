@@ -51,30 +51,32 @@ class Orden{
     {
         $db = conectar();
     
-        if ($puesto !== "socio") {
-            $consulta = "SELECT * FROM comanda_productos WHERE puesto = :puesto";
-        } else {
+        if ($puesto == "mesero") 
+        {
+            $consulta = "SELECT mesa, GROUP_CONCAT(estado) as estados FROM comanda_productos GROUP BY mesa";
+        }else if($puesto == "socio")
+        {
             $consulta = "SELECT * FROM comanda_productos";
+        } 
+        else {
+            $consulta = "SELECT * FROM comanda_productos WHERE puesto = :puesto";
         }
     
         try {
             $stmt = $db->prepare($consulta);
-    
-            if ($puesto !== "socio") {
-                $stmt->bindParam(':puesto', $puesto, PDO::PARAM_STR);
-            }
-    
             $stmt->execute();
-    
             $ordenes = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-            if ($ordenes) {
+            if ($ordenes) 
+            {
                 $response->getBody()->write(json_encode($ordenes));
-            } else {
+            } else
+            {
                 $response->getBody()->write(json_encode(array("mensaje" => "No hay ordenes disponibles.")));
             }
+    
         } catch (PDOException $excepcion) {
-            $error = array("error" => $excepcion->getmensaje());
+            $error = array("error" => $excepcion->getMessage());
             $response->getBody()->write(json_encode($error));
         }
     

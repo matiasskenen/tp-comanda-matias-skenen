@@ -2,11 +2,9 @@
 require_once '../db/conectarDB.php';
 class Mesas{
 
-    public $mesas_Maximas = 5;
     public $id;
-    public $codigo_comanda;
+    public $numero_mesa;
     public $max_comensales;
-    public $codigo_mesa;
     public $estado;
     public $mozo;
     public $fecha;
@@ -32,13 +30,13 @@ class Mesas{
         $fecha = new DateTime();
         $this->estado = self::mesaEstado($this->estado);
 
-        $insert = "INSERT INTO mesas (max_comensales, codigo_comanda, estado, mozo, fecha) 
-            VALUES (:max_comensales, :codigo_comanda, :estado, :mozo, :fecha)";
+        $insert = "INSERT INTO mesas (max_comensales, numero_mesa, estado, mozo, fecha) 
+            VALUES (:max_comensales, :numero_mesa, :estado, :mozo, :fecha)";
 
             try {
                 $consulta = $db->prepare($insert);
                 $consulta->bindValue(':max_comensales', $this->max_comensales);
-                $consulta->bindValue(':codigo_comanda', $this->codigo_comanda);
+                $consulta->bindValue(':numero_mesa', $this->numero_mesa);
                 $consulta->bindValue(':estado', $this->estado);
                 $consulta->bindValue(':mozo', $this->mozo);
                 $consulta->bindValue(':fecha', $fecha->format('d-m-Y'));
@@ -57,6 +55,7 @@ class Mesas{
 
     public static function obtenerTodos($response)
     {
+        
         $db = conectar();
     
         $consulta = "SELECT * FROM mesas";
@@ -104,21 +103,21 @@ class Mesas{
 
     }
 
-    public static function modificarMesa($id, $codigo_comanda, $estado, $max_comensales, $response)
+    public static function modificarMesa($numero_mesa, $estado, $max_comensales, $response)
     {
         $db = conectar();
 
         $estadoNuevo = self::mesaEstado($estado); 
-        $consulta = "UPDATE mesas SET estado = :estado, codigo_comanda = :codigo_comanda, max_comensales = :max_comensales WHERE codigo_mesa = :id";
+        $consulta = "UPDATE mesas SET estado = :estado, max_comensales = :max_comensales WHERE numero_mesa = :numero_mesa";
 
         $update = $db->prepare($consulta);
         $update->bindValue(':estado', $estadoNuevo);
-        $update->bindValue(':codigo_comanda', $codigo_comanda);
         $update->bindValue(':max_comensales', $max_comensales);
-        $update->bindValue(':id', $id);
+        $update->bindValue(':numero_mesa', $numero_mesa);
         $update->execute();
     }
 
+    
     public static function mesaEstado($valor)
     {
         switch($valor)
@@ -130,6 +129,8 @@ class Mesas{
             case 3:
                 return "cliente pagando";
             case 4:
+                return "pagada";
+            case 5:
                 return "cerrada";
             default:
                 return 'error';

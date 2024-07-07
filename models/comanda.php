@@ -25,22 +25,19 @@ class Comandas{
 
         $this->codigo_comanda = rand(10000, 99999);
 
-        // Insertar los productos de la comanda
         $insertProductos = "INSERT INTO comanda_productos (mesa, id_producto, cantidad, estado, puesto) 
                             VALUES (:mesa, :id_producto, :cantidad, :estado, :puesto)";
 
         $productosArray = json_decode($this->productos, true);
 
         foreach ($productosArray as $producto) {
-            // Verificar si el producto existe
             $puesto = self::comandaProductos($producto['id']);
+            $this->precio += self::comandaPrecio($producto['id']);
 
-            // Verificar la cantidad del producto
             if ($producto['cantidad'] <= 0) {
                 throw new Exception("Ingrese una cantidad válida para el Producto");
             }
 
-            // Insertar producto en la tabla comanda_productos
             $consultaProductos = $db->prepare($insertProductos);
             $consultaProductos->bindValue(':mesa', $this->id_mesa);
             $consultaProductos->bindValue(':id_producto', $producto['id']);
@@ -78,53 +75,41 @@ class Comandas{
 
     public static function obtenerTodos($codigo_comanda, $response)
     {
-        try {
-            $db = conectar();
-            $consulta = "SELECT * FROM comandas WHERE codigo_comanda = :codigo_comanda";
-            $datos = $db->prepare($consulta);
-            $datos->bindParam(':codigo_comanda', $codigo_comanda);
-            $datos->execute();
-    
-            $resultado = $datos->fetch(PDO::FETCH_ASSOC);
-    
-            if ($resultado) {
-                $response->getBody()->write(json_encode($resultado));
-            } else {
-                $mensaje = array("mensaje" => "No se encontraron registros en la tabla.");
-                $response->getBody()->write(json_encode($mensaje));
-            }
-    
-        } catch (PDOException $e) {
-            // Manejar errores de base de datos
-            echo "Error en la base de datos: " . $e->getmensaje();
-            return null;
+        $db = conectar();
+        $consulta = "SELECT * FROM comandas WHERE codigo_comanda = :codigo_comanda";
+        $datos = $db->prepare($consulta);
+        $datos->bindParam(':codigo_comanda', $codigo_comanda);
+        $datos->execute();
+
+        $resultado = $datos->fetch(PDO::FETCH_ASSOC);
+
+        if ($resultado) {
+            $response->getBody()->write(json_encode($resultado));
+        } else {
+            $mensaje = array("mensaje" => "No se encontraron registros en la tabla.");
+            $response->getBody()->write(json_encode($mensaje));
         }
     }
 
     public static function modificarComanda($id, $estado)
     {
-        try {
-            parse_str(file_get_contents("php://input"), $parametros);
-            $db = conectar();
-    
-            $consulta = "UPDATE comandas SET estado = :estado WHERE id_comanda = :id";
-    
-            $update = $db->prepare($consulta);
-            $update->bindValue(':estado', $estado);
-            $update->bindValue(':id', $id);
-    
-            $update->execute();
-    
-            echo "Comanda modificada exitosamente";
-        } catch (PDOException $e) {
-            // Manejo del error
-            echo "Error: " . $e->getmensaje();
-        }
+        parse_str(file_get_contents("php://input"), $parametros);
+        $db = conectar();
+
+        $consulta = "UPDATE comandas SET estado = :estado WHERE id_comanda = :id";
+
+        $update = $db->prepare($consulta);
+        $update->bindValue(':estado', $estado);
+        $update->bindValue(':id', $id);
+
+        $update->execute();
+
+        $response->getBody()->write(json_encode(['message' => 'Encuesta Modificada']));
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
     public static function borrarComanda($codigo_comanda, $response)
     {
-        try {
             echo $codigo_comanda;
             $db = conectar(); 
             
@@ -133,21 +118,18 @@ class Comandas{
             $datos->bindParam(':codigo_comanda', $codigo_comanda);
             $datos->execute();
 
-            $rowCount = $datos->rowCount(); // numero de filas afectadas
+            $filasContadas = $datos->filasContadas(); // numero de filas afectadas
             
-            if ($rowCount > 0) {
-
+            if ($filasContadas > 0) 
+            {
                 $response->getBody()->write(json_encode(["mensaje" => "Comanda eliminado correctamente."]));
                 return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
-            } else {
+            } 
+            else 
+            {
                 $response->getBody()->write(json_encode(["mensaje" => "No se encontró ningún Comanda"]));
                 return $response->withHeader('Content-Type', 'application/json')->withStatus(404);
             }
-            
-        } catch (PDOException $e) {
-            $response->getBody()->write(json_encode(["error" => "Error en la base de datos: " . $e->getMessage()]));
-            return $response->withStatus(500)->withHeader('Content-Type', 'application/json');
-        }
     }
 
     public static function comandaEstado($valor)
@@ -179,28 +161,8 @@ class Comandas{
 
     public static function comandaPrecio($valor)
     {
-        /*
-        foreach($valor as $comida)
-        {
-            if(Menu::verificarMenu($valor))
-            {
-                $precioTotal += Menu::valorMenu($valor);
-            }
-        }
-            */
-    }
-
-    public static function obtenerComandaCodigo($codigo_comanda)
-    {
-        $objAccesoDatos = AccesoDatos::obtenerInstancia();
-        $consulta = $objAccesoDatos->prepararConsulta("SELECT id, id_mesa, nombre_cliente, codigo_comanda,
-                                                            importe, estado, demora, baja
-                                                        FROM comanda WHERE codigo_comanda = :codigo_comanda");
-        $consulta->bindValue(':codigo_comanda', $codigo_comanda, PDO::PARAM_STR);
-        $consulta->execute();
-
-        //return $consulta->fetchObject('Comanda');
-        return $consulta->fetchAll(PDO::FETCH_CLASS, 'Comanda');
+        $precio = Menu::valorMenu($valor);
+        return $precio;
     }
 
 }

@@ -9,7 +9,7 @@ class MesasController extends Mesas implements IApiUsable
     {
         $parametros = $request->getParsedBody();
         if (!isset($parametros['max_comensales']) || empty($parametros["max_comensales"]) 
-        || !isset($parametros['codigo_comanda']) || empty($parametros["codigo_comanda"]) 
+        || !isset($parametros['numero_mesa']) || empty($parametros["numero_mesa"]) 
         || !isset($parametros['estado']) || empty($parametros["estado"]) 
         || !isset($parametros['mozo']) || empty($parametros["mozo"]) 
         || !isset($_FILES['imagen']))
@@ -21,22 +21,47 @@ class MesasController extends Mesas implements IApiUsable
         }
         else
         {
-            $db = conectar();
-            
-            if(mesasExiste($parametros['max_comensales'], $parametros['codigo_comanda']))
+            $header = $request->getHeaderLine('authorization'); 
+    
+            if(empty($header))
             {
-                $response->getBody()->write(json_encode(["error" => "La mesa ya existe en la base de datos"]));
-                return $response->withHeader('Content-Type', 'application/json');
+                $response->getBody()->write(json_encode(array("error" => "No se ingreso el token")));
+                $response = $response->withStatus(401);
             }
+            else
+            {
+                $token = trim(explode("Bearer", $header)[1]);
+                
+                $data = AutenticacionJWT::ObtenerData($token);
+                $puesto = $data->tipo_usuario;
+                $nombre = $data->usuario;
 
-            $fecha = new DateTime();
-            $nuevaMesa = new Mesas();
-            $nuevaMesa->max_comensales = $parametros['max_comensales'];
-            $nuevaMesa->codigo_comanda = $parametros['codigo_comanda'];
-            $nuevaMesa->estado = $parametros['estado'];
-            $nuevaMesa->mozo = $parametros['mozo'];
-            $nuevaMesa->crearMesa($response);
-            Mesas::ingresarVentaImagen($parametros['mozo'], $response);
+                if($puesto == "mesero" || $puesto == "socio")
+                {
+            
+                    if(mesasExiste($parametros['max_comensales'], $parametros['numero_mesa']))
+                    {
+                        $response->getBody()->write(json_encode(["error" => "La mesa ya existe en la base de datos"]));
+                        return $response->withHeader('Content-Type', 'application/json');
+                    }
+                    
+                    if(!(mozoExiste($parametros['mozo'])))
+                    {
+                        $response->getBody()->write(json_encode(["error" => "El mesero no existe"]));
+                        return $response->withHeader('Content-Type', 'application/json');
+                    }
+                    
+
+                    $fecha = new DateTime();
+                    $nuevaMesa = new Mesas();
+                    $nuevaMesa->max_comensales = $parametros['max_comensales'];
+                    $nuevaMesa->numero_mesa = $parametros['numero_mesa'];
+                    $nuevaMesa->estado = $parametros['estado'];
+                    $nuevaMesa->mozo = $parametros['mozo'];
+                    $nuevaMesa->crearMesa($response);
+                    Mesas::ingresarVentaImagen($parametros['mozo'], $response);
+                }
+            }
 
         }
         return $response->withHeader('Content-Type', 'application/json');
@@ -49,12 +74,33 @@ class MesasController extends Mesas implements IApiUsable
 
     public function TraerTodos($request, $response, $args)
     {
-        $lista = Mesas::obtenerTodos($response);
-        $mensaje = json_encode(array("lista mesas" => $lista));
+        $header = $request->getHeaderLine('authorization'); 
+    
+        if(empty($header))
+        {
+            $response->getBody()->write(json_encode(array("error" => "No se ingreso el token")));
+            $response = $response->withStatus(401);
+        }
+        else
+        {
+                $token = trim(explode("Bearer", $header)[1]);
+                
+                $data = AutenticacionJWT::ObtenerData($token);
+                $puesto = $data->tipo_usuario;
+                $nombre = $data->usuario;
 
-        $response->getBody()->write($mensaje);
-        return $response
-          ->withHeader('Content-Type', 'application/json');
+                if($puesto == "mesero" || $puesto == "socio")
+                {
+                    $lista = Mesas::obtenerTodos($response);
+                    $mensaje = json_encode(array("lista mesas" => $lista));
+            
+                    $response->getBody()->write($mensaje);
+                    return $response->withHeader('Content-Type', 'application/json');
+                }
+        }
+        return $response->withHeader('Content-Type', 'application/json');
+
+
     }
     
     public function ModificarUno($request, $response, $args)
@@ -63,8 +109,7 @@ class MesasController extends Mesas implements IApiUsable
         parse_str(file_get_contents("php://input"), $parametros);
 
         if (!isset($parametros["max_comensales"]) || empty($parametros["max_comensales"])
-        || !isset($parametros["estado"]) || empty($parametros["estado"])
-        || !isset($parametros["codigo_comanda"]) || empty($parametros["codigo_comanda"]))
+        || !isset($parametros["estado"]) || empty($parametros["estado"]))
         {
             $response->getBody()->write(json_encode(["error" => "Completar la cantidad de maxima de comensales: [max_comensales]"]));
             return $response->withHeader('Content-Type', 'application/json');
@@ -73,8 +118,7 @@ class MesasController extends Mesas implements IApiUsable
         {
             $db = conectar();
 
-            // Se usa 'id_usuario' en lugar de 'id'
-            Mesas::modificarMesa($id, $parametros['codigo_comanda'], $parametros['estado'], $parametros['max_comensales'], $response);
+            Mesas::modificarMesa($id, $parametros['estado'], $parametros['max_comensales'], $response);
             $mensaje = json_encode(array("mensaje" => "Estado de mesa modificado exitosamente"));
 
         }

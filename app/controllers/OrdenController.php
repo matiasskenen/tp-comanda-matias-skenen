@@ -58,8 +58,7 @@ class OrdenController extends Orden implements IApiUsable{
             
             $data = AutenticacionJWT::ObtenerData($token);
             $puesto = $data->tipo_usuario;
-            Orden::obtenerTodos($puesto, $response);
-            $mensaje = json_encode(array("mensaje" => "Orden Estado actualizada con exito"));        
+            Orden::obtenerTodos($puesto, $response);      
         }
 
         ;

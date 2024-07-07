@@ -14,6 +14,7 @@ require_once '../middlewares/UsuariosMiddleware.php';
 
 //rutas
 require_once './controllers/UsuarioController.php';
+require_once './controllers/EncuestaController.php';
 require_once './controllers/MesasController.php';
 require_once './controllers/ComandaController.php';
 require_once './controllers/OrdenController.php';
@@ -112,7 +113,14 @@ $app->group('/empleados', function (RouteCollectorProxy $group) {
   ->add(\UsuariosMiddleware::class . ':VerificaAccesoSocio');
   $group->get('/sector', \EmpleadosController::class . ':OpSector')
   ->add(\UsuariosMiddleware::class . ':VerificaAccesoSocio');   
-  
+});
+
+$app->group('/encuesta', function (RouteCollectorProxy $group) {
+  $group->post('/alta', \EncuestaController::class . ':CargarUno');
+  $group->get('[/]', \EncuestaController::class . ':TraerTodos')
+  ->add(\UsuariosMiddleware::class . ':VerificaAccesoSocio'); 
+  $group->put('/modificar', \EncuestaController::class . ':ModificarUno')
+  ->add(\UsuariosMiddleware::class . ':VerificaAccesoSocio');  
 });
 
 
