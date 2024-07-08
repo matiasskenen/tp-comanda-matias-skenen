@@ -68,7 +68,7 @@ class ComandaController extends Comandas implements IApiUsable
             if(!(isset($parametros['codigo_comanda'])))
             {
                 $response->getBody()->write(json_encode(array("error" => "No se ingreso codigo_comanda")));
-                $response = $response->withStatus(401);
+                $response = $response->withStatus();
             }
             else
             {
@@ -89,7 +89,7 @@ class ComandaController extends Comandas implements IApiUsable
                 $consulta = "SELECT * FROM comandas";
 
                 $insert = $db->query($consulta);
-                $usuarios = $insert->fetchAll(PDO::FETCH_ASSOC);
+                $usuarios = $insert->fetchAll();
         
                 if (count($usuarios) > 0) 
                 {

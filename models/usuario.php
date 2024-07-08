@@ -155,35 +155,26 @@ class Usuario{
     {
         switch($valor)
         {
-            case "Disponible":
-            case "Suspendido":
-            case "Baja":
-                return true;
+            case "1":
+                return "disponible";
+            break;
+            case "2":
+                return "ocupado";
+            break;
+            case 3:
+                return "suspendido";
             break;
             default:
-                return false;
+                return "error";
             break;
 
         }
     }
 
-    public static function validarEstado($puesto, $estado)
-    {
-        if(Puesto($puesto) &&  Estado($estado))
-        {
-            return true;
-        }
-    
-    }
-
-    //Hacer un metodo para consultar el id de usuario.
 
     public static function obtenerUsuarioId($usuario)
     {
-
         $db = conectar();
-
-        // Se usa 'id_usuario' en lugar de 'id'
         $consulta = "UPDATE usuarios SET usuario = :usuario, tipo = :tipo, clave = :clave, nombre = :nombre, apellido = :apellido 
         WHERE id_usuario = :id";
     }

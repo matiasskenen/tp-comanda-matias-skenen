@@ -29,13 +29,16 @@ class UsuarioController extends Usuario implements IApiUsable
                 return $response->withHeader('Content-Type', 'application/json');
             }
 
+            $Nuevoestado = Usuario::Estado($parametros['estado']);
+
             $fecha = new DateTime();
             $nuevoUsuario = new Usuario();
             $nuevoUsuario->nombre = $parametros['usuario'];
             $nuevoUsuario->mail = $parametros['mail'];
             $nuevoUsuario->clave = $parametros['clave'];
             $nuevoUsuario->puesto = $parametros['puesto'];
-            $nuevoUsuario->estado = $parametros['estado'];
+
+            $nuevoUsuario->estado = $Nuevoestado;
             $nuevoUsuario->fecha_ingreso = $fecha->format('d-m-Y'); 
             $nuevoUsuario->fecha_salida = '---';
             $nuevoUsuario->crearUsuario($response);

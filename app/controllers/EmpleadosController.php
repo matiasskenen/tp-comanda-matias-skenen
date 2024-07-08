@@ -27,7 +27,7 @@ class EmpleadosController extends Empleados implements IApiUsable
         if(!(isset($parametros['operacion'])))
         {
             $response->getBody()->write(json_encode(array("error" => "No se ingreso codigo_comanda")));
-            $response = $response->withStatus(401);
+            $response = $response->withStatus();
         }
         else
         {

@@ -36,7 +36,7 @@ class Encuestas{
         $datos = $db->prepare($consulta);
         $datos->execute();
     
-        $resultado = $datos->fetchAll(PDO::FETCH_ASSOC);
+        $resultado = $datos->fetchAll();
     
         if ($resultado) 
         {

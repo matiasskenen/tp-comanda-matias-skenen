@@ -104,20 +104,21 @@ class EncuestaController extends Encuestas implements IApiUsable
         $consulta = "SELECT * FROM encuestas ORDER BY puntuacion DESC";
         $datos = $db->prepare($consulta);
         $datos->execute();
-        $encuestas = $datos->fetchAll(PDO::FETCH_ASSOC);
+        $encuestas = $datos->fetchAll();
         $pdf = new \FPDF();
         $pdf->AddPage();
         $pdf->SetFont('Arial', '', 12);
         
         foreach ($encuestas as $encuesta) {
-            $pdf->MultiCell(0, 10, "ID Encuesta: {$encuesta['id_encuesta']}\n"
-                                    . "Numero Mesa: {$encuesta['numero_mesa']}\n"
-                                    . "Nombre: {$encuesta['nombre']}\n"
-                                    . "Puntuacion: {$encuesta['puntuacion']}\n"
-                                    . "Codigo Pedido: {$encuesta['codigo_pedido']}\n"
-                                    . "Fecha: {$encuesta['fecha']}\n\n");
+            $pdf->Cell(0, 10, "ID Encuesta: {$encuesta['id_encuesta']}", 0, 1);
+            $pdf->Cell(0, 10, "Numero Mesa: {$encuesta['numero_mesa']}", 0, 1);
+            $pdf->Cell(0, 10, "Nombre: {$encuesta['nombre']}", 0, 1);
+            $pdf->Cell(0, 10, "Puntuacion: {$encuesta['puntuacion']}", 0, 1);
+            $pdf->Cell(0, 10, "Codigo Pedido: {$encuesta['codigo_pedido']}", 0, 1);
+            $pdf->Cell(0, 10, "Fecha: {$encuesta['fecha']}", 0, 1);
+            $pdf->Ln(10); // Añadir un espacio entre encuestas
         }
-
+        //formato string
         $pdfContent = $pdf->Output('S');
 
         $response->getBody()->write($pdfContent);
