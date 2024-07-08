@@ -81,7 +81,6 @@ class EncuestaController extends Encuestas implements IApiUsable
         return $response->withHeader('Content-Type', 'application/json');
     }
 
-    //Terminar
     public function BorrarUno($request, $response, $args)
     {
         $parametros = $request->getParsedBody();

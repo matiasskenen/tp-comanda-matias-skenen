@@ -12,6 +12,16 @@
 				{
 					"name": "USUARIOS LOGIN TOKEN",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjAyNzc0NjgsImV4cCI6MTcyMDMzNzQ2OCwiZGF0YSI6eyJ1c3VhcmlvIjoic29jaW9tYXRpYXMiLCJ0aXBvX3VzdWFyaW8iOiJzb2NpbyJ9LCJhcHAiOiJMYSBDb21hbmRhIC0gSkMifQ.-HkHvgOFFJiQSbeky-KWlu4uuYgexIWfTEpOUYw9rsI",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -19,7 +29,7 @@
 							"formdata": [
 								{
 									"key": "usuario",
-									"value": "matiassk1",
+									"value": "matiasCocinero",
 									"type": "text"
 								},
 								{
@@ -29,7 +39,7 @@
 								},
 								{
 									"key": "clave",
-									"value": "matias12344",
+									"value": "matias1234",
 									"type": "text"
 								}
 							]
@@ -59,7 +69,7 @@
 							"formdata": [
 								{
 									"key": "usuario",
-									"value": "matiasSocio",
+									"value": "sociomatias",
 									"type": "text"
 								},
 								{
@@ -95,154 +105,6 @@
 			"name": "AGREGAR",
 			"item": [
 				{
-					"name": "CSV",
-					"item": [
-						{
-							"name": "POST CSV",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MTk4NTk5NDYsImV4cCI6MTcxOTkxOTk0NiwiZGF0YSI6eyJ1c3VhcmlvIjoibWF0aWFzU29jaW8iLCJ0aXBvX3VzdWFyaW8iOiJzb2NpbyJ9LCJhcHAiOiJMYSBDb21hbmRhIC0gSkMifQ.QRZrjkn1nv2hMzEaUScfMX853MEplZjqZMId7XtXjOY",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "formdata",
-									"formdata": [
-										{
-											"key": "usuario",
-											"value": "matiasestudar",
-											"type": "text"
-										},
-										{
-											"key": "mail",
-											"value": "matias.skenen@gmail.com",
-											"type": "text"
-										},
-										{
-											"key": "clave",
-											"value": "matias1234",
-											"type": "text"
-										},
-										{
-											"key": "puesto",
-											"value": "cocinero",
-											"type": "text"
-										},
-										{
-											"key": "estado",
-											"value": "nada",
-											"type": "text"
-										},
-										{
-											"key": "fecha_ingreso",
-											"value": "20-4-2004",
-											"type": "text"
-										},
-										{
-											"key": "fecha_salida",
-											"value": "20-4-2004",
-											"type": "text"
-										}
-									]
-								},
-								"url": {
-									"raw": "http://localhost:666/usuarios/alta",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "666",
-									"path": [
-										"usuarios",
-										"alta"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "POST CSV",
-							"protocolProfileBehavior": {
-								"disableBodyPruning": true
-							},
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MTk4NTk5NDYsImV4cCI6MTcxOTkxOTk0NiwiZGF0YSI6eyJ1c3VhcmlvIjoibWF0aWFzU29jaW8iLCJ0aXBvX3VzdWFyaW8iOiJzb2NpbyJ9LCJhcHAiOiJMYSBDb21hbmRhIC0gSkMifQ.QRZrjkn1nv2hMzEaUScfMX853MEplZjqZMId7XtXjOY",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"body": {
-									"mode": "formdata",
-									"formdata": [
-										{
-											"key": "usuario",
-											"value": "matiasestudar",
-											"type": "text"
-										},
-										{
-											"key": "mail",
-											"value": "matias.skenen@gmail.com",
-											"type": "text"
-										},
-										{
-											"key": "clave",
-											"value": "matias1234",
-											"type": "text"
-										},
-										{
-											"key": "puesto",
-											"value": "cocinero",
-											"type": "text"
-										},
-										{
-											"key": "estado",
-											"value": "nada",
-											"type": "text"
-										},
-										{
-											"key": "fecha_ingreso",
-											"value": "20-4-2004",
-											"type": "text"
-										},
-										{
-											"key": "fecha_salida",
-											"value": "20-4-2004",
-											"type": "text"
-										}
-									]
-								},
-								"url": {
-									"raw": "http://localhost:666/usuarios/alta",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "666",
-									"path": [
-										"usuarios",
-										"alta"
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
 					"name": "POST USUARIOS",
 					"request": {
 						"auth": {
@@ -250,7 +112,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MTk4NTk5NDYsImV4cCI6MTcxOTkxOTk0NiwiZGF0YSI6eyJ1c3VhcmlvIjoibWF0aWFzU29jaW8iLCJ0aXBvX3VzdWFyaW8iOiJzb2NpbyJ9LCJhcHAiOiJMYSBDb21hbmRhIC0gSkMifQ.QRZrjkn1nv2hMzEaUScfMX853MEplZjqZMId7XtXjOY",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjA0NjM5OTMsImV4cCI6MTcyMDUyMzk5MywiZGF0YSI6eyJ1c3VhcmlvIjoic29jaW9tYXRpYXMiLCJ0aXBvX3VzdWFyaW8iOiJzb2NpbyJ9LCJhcHAiOiJMYSBDb21hbmRhIC0gSkMifQ.1vQaVet8KRj1WwJJFOxfAGdCTfZI5wi_q2iuB6Q6Z5s",
 									"type": "string"
 								}
 							]
@@ -262,7 +124,7 @@
 							"formdata": [
 								{
 									"key": "usuario",
-									"value": "matiasestudar",
+									"value": "matiasCocinero",
 									"type": "text"
 								},
 								{
@@ -282,16 +144,11 @@
 								},
 								{
 									"key": "estado",
-									"value": "nada",
+									"value": "1",
 									"type": "text"
 								},
 								{
 									"key": "fecha_ingreso",
-									"value": "20-4-2004",
-									"type": "text"
-								},
-								{
-									"key": "fecha_salida",
 									"value": "20-4-2004",
 									"type": "text"
 								}
@@ -320,7 +177,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MTk4NDkyNDAsImV4cCI6MTcxOTkwOTI0MCwiZGF0YSI6eyJ1c3VhcmlvIjoibWF0aWFzU29jaW8iLCJ0aXBvX3VzdWFyaW8iOiJzb2NpbyJ9LCJhcHAiOiJMYSBDb21hbmRhIC0gSkMifQ.uA1f4Jl3NXQg90EcVI8gfsu0vU-TBafWA8tjOSexTMA",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjA0NjQyNjgsImV4cCI6MTcyMDUyNDI2OCwiZGF0YSI6eyJ1c3VhcmlvIjoibWF0aWFzTW96byIsInRpcG9fdXN1YXJpbyI6Im1lc2VybyJ9LCJhcHAiOiJMYSBDb21hbmRhIC0gSkMifQ.9nLV6bMcEXYxBsOcg-QGLWF5E4-pAQ_MSbHkNc1qLpo",
 									"type": "string"
 								}
 							]
@@ -332,7 +189,7 @@
 							"formdata": [
 								{
 									"key": "id_mesa",
-									"value": "3",
+									"value": "1",
 									"type": "text"
 								},
 								{
@@ -347,7 +204,7 @@
 								},
 								{
 									"key": "productos",
-									"value": "[\n    {\"id\": 1, \"cantidad\": 3},\n    {\"id\": 2, \"cantidad\": 3}\n]",
+									"value": "[\n    {\"id\": 1, \"cantidad\": 1},\n    {\"id\": 2, \"cantidad\": 1},\n    {\"id\": 3, \"cantidad\": 1},\n    {\"id\": 4, \"cantidad\": 1}\n]",
 									"type": "text"
 								}
 							]
@@ -367,8 +224,73 @@
 					"response": []
 				},
 				{
+					"name": "POST ENCUESTAS",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjAyNzc2NTMsImV4cCI6MTcyMDMzNzY1MywiZGF0YSI6eyJ1c3VhcmlvIjoibWF0aWFzTW96byIsInRpcG9fdXN1YXJpbyI6Im1lc2VybyJ9LCJhcHAiOiJMYSBDb21hbmRhIC0gSkMifQ.mEp4BOaZXW99o23tId6sgSsBqxuAK59QxpPgtEg4S5w",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "numero_mesa",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "nombre",
+									"value": "matias",
+									"type": "text"
+								},
+								{
+									"key": "puntuacion",
+									"value": "4",
+									"type": "text"
+								},
+								{
+									"key": "codigo_pedido",
+									"value": "27612",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:666/encuesta/alta",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "666",
+							"path": [
+								"encuesta",
+								"alta"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "POST MESAS",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjA0NjQyNjgsImV4cCI6MTcyMDUyNDI2OCwiZGF0YSI6eyJ1c3VhcmlvIjoibWF0aWFzTW96byIsInRpcG9fdXN1YXJpbyI6Im1lc2VybyJ9LCJhcHAiOiJMYSBDb21hbmRhIC0gSkMifQ.9nLV6bMcEXYxBsOcg-QGLWF5E4-pAQ_MSbHkNc1qLpo",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -380,7 +302,7 @@
 									"type": "text"
 								},
 								{
-									"key": "codigo_comanda",
+									"key": "numero_mesa",
 									"value": "1",
 									"type": "text"
 								},
@@ -391,13 +313,13 @@
 								},
 								{
 									"key": "mozo",
-									"value": "1",
+									"value": "matiasMozo",
 									"type": "text"
 								},
 								{
-									"key": "foto",
-									"value": "lucas",
-									"type": "text"
+									"key": "imagen",
+									"type": "file",
+									"src": "/C:/Users/PC/Desktop/1.PNG"
 								}
 							]
 						},
@@ -522,8 +444,110 @@
 					]
 				},
 				{
-					"name": "New Folder",
+					"name": "GETS CONSULTAS",
 					"item": [
+						{
+							"name": "GET PRODUCTOS/Orden",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjA0NjQyNjgsImV4cCI6MTcyMDUyNDI2OCwiZGF0YSI6eyJ1c3VhcmlvIjoibWF0aWFzTW96byIsInRpcG9fdXN1YXJpbyI6Im1lc2VybyJ9LCJhcHAiOiJMYSBDb21hbmRhIC0gSkMifQ.9nLV6bMcEXYxBsOcg-QGLWF5E4-pAQ_MSbHkNc1qLpo",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:666/orden",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "666",
+									"path": [
+										"orden"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET PEDIDOS/Cliente",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:666/comanda?codigo_comanda=27612",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "666",
+									"path": [
+										"comanda"
+									],
+									"query": [
+										{
+											"key": "codigo_comanda",
+											"value": "27612"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET MESAS",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:666/mesas",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "666",
+									"path": [
+										"mesas"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET ENCUESTAS",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjAzNzcwMzksImV4cCI6MTcyMDQzNzAzOSwiZGF0YSI6eyJ1c3VhcmlvIjoic29jaW9tYXRpYXMiLCJ0aXBvX3VzdWFyaW8iOiJzb2NpbyJ9LCJhcHAiOiJMYSBDb21hbmRhIC0gSkMifQ.iE1vWkgIDEYlYWEEJRq8BBQgP0O_1CHPinfyv8Ql-HA",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:666/encuesta",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "666",
+									"path": [
+										"encuesta"
+									]
+								}
+							},
+							"response": []
+						},
 						{
 							"name": "GET USUARIOS",
 							"request": {
@@ -551,7 +575,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MTk4NDkyNDAsImV4cCI6MTcxOTkwOTI0MCwiZGF0YSI6eyJ1c3VhcmlvIjoibWF0aWFzU29jaW8iLCJ0aXBvX3VzdWFyaW8iOiJzb2NpbyJ9LCJhcHAiOiJMYSBDb21hbmRhIC0gSkMifQ.uA1f4Jl3NXQg90EcVI8gfsu0vU-TBafWA8tjOSexTMA",
+											"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MTk4NzQ3MTEsImV4cCI6MTcxOTkzNDcxMSwiZGF0YSI6eyJ1c3VhcmlvIjoic29jaW9tYXRpYXMiLCJ0aXBvX3VzdWFyaW8iOiJzb2NpbyJ9LCJhcHAiOiJMYSBDb21hbmRhIC0gSkMifQ.DJg1u5n8xcv2IyPyYobGF8wjMXHuFEr5q1GIcfq4_LU",
 											"type": "string"
 										}
 									]
@@ -578,79 +602,6 @@
 								}
 							},
 							"response": []
-						},
-						{
-							"name": "GET PEDIDOS/Cliente Copy",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "http://localhost:666/comanda?codigo_comanda=44565",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "666",
-									"path": [
-										"comanda"
-									],
-									"query": [
-										{
-											"key": "codigo_comanda",
-											"value": "44565"
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "GET MESAS",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "http://localhost:666/mesas",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "666",
-									"path": [
-										"mesas"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "GET PRODUCTOS/Orden",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{Cocinero}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "http://localhost:666/orden",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "666",
-									"path": [
-										"orden"
-									]
-								}
-							},
-							"response": []
 						}
 					]
 				}
@@ -662,6 +613,56 @@
 				{
 					"name": "ORDEN/PRODUCTOS",
 					"item": [
+						{
+							"name": "ORDEN PEDIDO MODIFICAR Copy 2",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjAyNzc2NTMsImV4cCI6MTcyMDMzNzY1MywiZGF0YSI6eyJ1c3VhcmlvIjoibWF0aWFzTW96byIsInRpcG9fdXN1YXJpbyI6Im1lc2VybyJ9LCJhcHAiOiJMYSBDb21hbmRhIC0gSkMifQ.mEp4BOaZXW99o23tId6sgSsBqxuAK59QxpPgtEg4S5w",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "codigo_comanda",
+											"value": "7",
+											"type": "text"
+										},
+										{
+											"key": "estado",
+											"value": "preparando",
+											"type": "text"
+										},
+										{
+											"key": "demora",
+											"value": "5",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:666/orden/modificarestado",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "666",
+									"path": [
+										"orden",
+										"modificarestado"
+									]
+								}
+							},
+							"response": []
+						},
 						{
 							"name": "ORDEN MODIFICAR LISTA",
 							"request": {
@@ -711,16 +712,21 @@
 								}
 							},
 							"response": []
-						},
+						}
+					]
+				},
+				{
+					"name": "COMANDA",
+					"item": [
 						{
-							"name": "ORDEN PEDIDO MODIFICAR Copy 2",
+							"name": "PEDIDOS MODIFICAR",
 							"request": {
 								"auth": {
 									"type": "bearer",
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MTk3NjA2MDUsImV4cCI6MTcxOTgyMDYwNSwiZGF0YSI6eyJ1c3VhcmlvIjoibWF0aWFzc2siLCJ0aXBvX3VzdWFyaW8iOiJzb2NpbyJ9LCJhcHAiOiJMYSBDb21hbmRhIC0gSkMifQ.ssJgNgrb64jIhmBPyx_3CcDOdhBJ2VtoVYI7nAmOoYg",
+											"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjAyNzc2NTMsImV4cCI6MTcyMDMzNzY1MywiZGF0YSI6eyJ1c3VhcmlvIjoibWF0aWFzTW96byIsInRpcG9fdXN1YXJpbyI6Im1lc2VybyJ9LCJhcHAiOiJMYSBDb21hbmRhIC0gSkMifQ.mEp4BOaZXW99o23tId6sgSsBqxuAK59QxpPgtEg4S5w",
 											"type": "string"
 										}
 									]
@@ -731,32 +737,22 @@
 									"mode": "urlencoded",
 									"urlencoded": [
 										{
-											"key": "codigo_comanda",
-											"value": "20",
-											"type": "text"
-										},
-										{
 											"key": "estado",
-											"value": "preparando",
-											"type": "text"
-										},
-										{
-											"key": "demora",
-											"value": "5",
+											"value": "lista",
 											"type": "text"
 										}
 									]
 								},
 								"url": {
-									"raw": "http://localhost:666/orden/modificarestado",
+									"raw": "http://localhost:666/comanda/3",
 									"protocol": "http",
 									"host": [
 										"localhost"
 									],
 									"port": "666",
 									"path": [
-										"orden",
-										"modificarestado"
+										"comanda",
+										"3"
 									]
 								}
 							},
@@ -770,6 +766,16 @@
 						{
 							"name": "MESAS MODIFICAR",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjAyNzc2NTMsImV4cCI6MTcyMDMzNzY1MywiZGF0YSI6eyJ1c3VhcmlvIjoibWF0aWFzTW96byIsInRpcG9fdXN1YXJpbyI6Im1lc2VybyJ9LCJhcHAiOiJMYSBDb21hbmRhIC0gSkMifQ.mEp4BOaZXW99o23tId6sgSsBqxuAK59QxpPgtEg4S5w",
+											"type": "string"
+										}
+									]
+								},
 								"method": "PUT",
 								"header": [],
 								"body": {
@@ -782,18 +788,13 @@
 										},
 										{
 											"key": "estado",
-											"value": "2",
-											"type": "text"
-										},
-										{
-											"key": "codigo_comanda",
-											"value": "1",
+											"value": "4",
 											"type": "text"
 										}
 									]
 								},
 								"url": {
-									"raw": "http://localhost:666/mesas/2",
+									"raw": "http://localhost:666/mesas/1",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -801,7 +802,7 @@
 									"port": "666",
 									"path": [
 										"mesas",
-										"2"
+										"1"
 									]
 								}
 							},
@@ -866,17 +867,17 @@
 					]
 				},
 				{
-					"name": "COMANDA",
+					"name": "ENCUESTA",
 					"item": [
 						{
-							"name": "PEDIDOS MODIFICAR",
+							"name": "ENCUESTAS MODIFICAR",
 							"request": {
 								"auth": {
 									"type": "bearer",
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MTk4NDkyNDAsImV4cCI6MTcxOTkwOTI0MCwiZGF0YSI6eyJ1c3VhcmlvIjoibWF0aWFzU29jaW8iLCJ0aXBvX3VzdWFyaW8iOiJzb2NpbyJ9LCJhcHAiOiJMYSBDb21hbmRhIC0gSkMifQ.uA1f4Jl3NXQg90EcVI8gfsu0vU-TBafWA8tjOSexTMA",
+											"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjAzNzcwMzksImV4cCI6MTcyMDQzNzAzOSwiZGF0YSI6eyJ1c3VhcmlvIjoic29jaW9tYXRpYXMiLCJ0aXBvX3VzdWFyaW8iOiJzb2NpbyJ9LCJhcHAiOiJMYSBDb21hbmRhIC0gSkMifQ.iE1vWkgIDEYlYWEEJRq8BBQgP0O_1CHPinfyv8Ql-HA",
 											"type": "string"
 										}
 									]
@@ -887,22 +888,27 @@
 									"mode": "urlencoded",
 									"urlencoded": [
 										{
-											"key": "estado",
-											"value": "saca",
+											"key": "codigo_pedido",
+											"value": "27612",
+											"type": "text"
+										},
+										{
+											"key": "puntuacion",
+											"value": "5",
 											"type": "text"
 										}
 									]
 								},
 								"url": {
-									"raw": "http://localhost:666/comanda/3",
+									"raw": "http://localhost:666/encuesta/modificar",
 									"protocol": "http",
 									"host": [
 										"localhost"
 									],
 									"port": "666",
 									"path": [
-										"comanda",
-										"3"
+										"encuesta",
+										"modificar"
 									]
 								}
 							},
@@ -923,7 +929,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MTk4NDkyNDAsImV4cCI6MTcxOTkwOTI0MCwiZGF0YSI6eyJ1c3VhcmlvIjoibWF0aWFzU29jaW8iLCJ0aXBvX3VzdWFyaW8iOiJzb2NpbyJ9LCJhcHAiOiJMYSBDb21hbmRhIC0gSkMifQ.uA1f4Jl3NXQg90EcVI8gfsu0vU-TBafWA8tjOSexTMA",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjA0NjM5OTMsImV4cCI6MTcyMDUyMzk5MywiZGF0YSI6eyJ1c3VhcmlvIjoic29jaW9tYXRpYXMiLCJ0aXBvX3VzdWFyaW8iOiJzb2NpbyJ9LCJhcHAiOiJMYSBDb21hbmRhIC0gSkMifQ.1vQaVet8KRj1WwJJFOxfAGdCTfZI5wi_q2iuB6Q6Z5s",
 									"type": "string"
 								}
 							]
@@ -935,7 +941,7 @@
 							"urlencoded": [
 								{
 									"key": "usuario",
-									"value": "matiasestudar",
+									"value": "matiasCocinero",
 									"type": "text"
 								}
 							]
@@ -1040,6 +1046,171 @@
 						}
 					},
 					"response": []
+				}
+			]
+		},
+		{
+			"name": "CSV / PDF",
+			"item": [
+				{
+					"name": "CSV",
+					"item": [
+						{
+							"name": "INSERTAR CSV",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MTk4NTk5NDYsImV4cCI6MTcxOTkxOTk0NiwiZGF0YSI6eyJ1c3VhcmlvIjoibWF0aWFzU29jaW8iLCJ0aXBvX3VzdWFyaW8iOiJzb2NpbyJ9LCJhcHAiOiJMYSBDb21hbmRhIC0gSkMifQ.QRZrjkn1nv2hMzEaUScfMX853MEplZjqZMId7XtXjOY",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "csv",
+											"type": "file",
+											"src": "/C:/Users/PC/Desktop/usuarios.csv"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:666/usuarios/generarCSV?csv",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "666",
+									"path": [
+										"usuarios",
+										"generarCSV"
+									],
+									"query": [
+										{
+											"key": "csv",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DESCARGAR CSV",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjA0NDM0MTMsImV4cCI6MTcyMDUwMzQxMywiZGF0YSI6eyJ1c3VhcmlvIjoic29jaW9tYXRpYXMiLCJ0aXBvX3VzdWFyaW8iOiJzb2NpbyJ9LCJhcHAiOiJMYSBDb21hbmRhIC0gSkMifQ.ii1FJay5dXy5Voj4tieX9InLTNSQe8jUCUYegBvzVLs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "usuario",
+											"value": "matiasestudar",
+											"type": "text"
+										},
+										{
+											"key": "mail",
+											"value": "matias.skenen@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "clave",
+											"value": "matias1234",
+											"type": "text"
+										},
+										{
+											"key": "puesto",
+											"value": "cocinero",
+											"type": "text"
+										},
+										{
+											"key": "estado",
+											"value": "nada",
+											"type": "text"
+										},
+										{
+											"key": "fecha_ingreso",
+											"value": "20-4-2004",
+											"type": "text"
+										},
+										{
+											"key": "fecha_salida",
+											"value": "20-4-2004",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:666/usuarios/archivos/descargarCSV",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "666",
+									"path": [
+										"usuarios",
+										"archivos",
+										"descargarCSV"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "PDF",
+					"item": [
+						{
+							"name": "GET ENCUESTAS PDF",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjA0NjM5OTMsImV4cCI6MTcyMDUyMzk5MywiZGF0YSI6eyJ1c3VhcmlvIjoic29jaW9tYXRpYXMiLCJ0aXBvX3VzdWFyaW8iOiJzb2NpbyJ9LCJhcHAiOiJMYSBDb21hbmRhIC0gSkMifQ.1vQaVet8KRj1WwJJFOxfAGdCTfZI5wi_q2iuB6Q6Z5s",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:666/encuesta/generarPdf",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "666",
+									"path": [
+										"encuesta",
+										"generarPdf"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		}
