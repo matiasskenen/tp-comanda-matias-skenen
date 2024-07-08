@@ -18,6 +18,7 @@ class Comandas{
                 
         $fecha = new DateTime();
         $this->estado = self::comandaEstado($this->estado);
+        
         if ($this->estado == "error") {
             $response->getBody()->write(json_encode(["error" => "No existe el estado de Comanda ingresado"]));
             return $response = $response->withStatus(401);

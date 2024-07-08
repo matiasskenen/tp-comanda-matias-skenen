@@ -142,7 +142,7 @@ class UsuarioController extends Usuario implements IApiUsable
 
     }
 
-    public function GenerarCSV($request, $response, $args)
+    public function InsertarCSV($request, $response, $args)
     {
         $uploadedFiles = $request->getUploadedFiles();
 
@@ -151,7 +151,7 @@ class UsuarioController extends Usuario implements IApiUsable
             $csvFile = $uploadedFiles['csv'];
             $csvFilePath = $csvFile->getStream()->getMetadata('uri');
             
-            $datos = Usuario::procesarCSV($csvFilePath);
+            $datos = Usuario::procesarCSV($csvFilePath, $response);
 
             $response->getBody()->write(json_encode($datos));
             return $response->withHeader('Content-Type', 'application/json');
@@ -163,8 +163,27 @@ class UsuarioController extends Usuario implements IApiUsable
     
     }
     
-    public function DescargarCSV($request, $response, $args)
+    public function ArchivoCSV($request, $response, $args)
     {
-    
+        $filename = "usuarios.csv";
+        $delimiter = ",";
+
+        $f = fopen('php://memory', 'w');
+
+        // Encabezados de las columnas
+        $fields = array('id_usuario', 'usuario', 'puesto', 'clave', 'estado', 'mail', 'fecha_ingreso', 'fecha_salida');
+        fputcsv($f, $fields, $delimiter);
+
+        $db = conectar();
+        $query = "SELECT id_usuario, usuario, puesto, clave, estado, mail, fecha_ingreso, fecha_salida FROM usuarios";
+        foreach ($db->query($query) as $row) {
+            fputcsv($f, $row, $delimiter);
+        }
+
+        fseek($f, 0);
+
+        return $response->withHeader('Content-Type', 'text/csv')
+                        ->withHeader('Content-Disposition', 'attachment; filename="' . $filename . '";')
+                        ->withBody(new \Slim\Psr7\Stream($f));
     }
 }

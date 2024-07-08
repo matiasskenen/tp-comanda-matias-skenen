@@ -210,8 +210,33 @@ class Usuario{
             return $error;
         }
     }
+
+    public static function descargarArchivoCSV()
+    {
+        $filename = "usuarios.csv";
+        $delimiter = ",";
+
+        $f = fopen('php://memory', 'w');
+
+        // Encabezados de las columnas
+        $fields = array('id_usuario', 'usuario', 'puesto', 'clave', 'estado', 'mail', 'fecha_ingreso', 'fecha_salida');
+        fputcsv($f, $fields, $delimiter);
+
+        $db = conectar();
+        $query = "SELECT id_usuario, usuario, puesto, clave, estado, mail, fecha_ingreso, fecha_salida FROM usuarios";
+        foreach ($db->query($query) as $row) {
+            fputcsv($f, $row, $delimiter);
+        }
+
+        fseek($f, 0);
+
+        return $response->withHeader('Content-Type', 'text/csv')
+                        ->withHeader('Content-Disposition', 'attachment; filename="' . $filename . '";')
+                        ->withBody(new \Slim\Psr7\Stream($f));
+
+    }
   
-    public static function procesarCSV($File)
+    public static function procesarCSV($File, $response)
     {
         $db = conectar();
 

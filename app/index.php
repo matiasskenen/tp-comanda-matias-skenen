@@ -69,14 +69,11 @@ $app->group('/usuarios', function (RouteCollectorProxy $group) {
   $group->delete('/borrar', \UsuarioController::class . ':BorrarUno')
   ->add(\UsuariosMiddleware::class . ':VerificaAccesoSocio');
   
-  $group->post('/generarCSV', \UsuarioController::class . ':GenerarCSV')
-  ->add(\UsuariosMiddleware::class . ':VerificaAccesoSocio');
+  $group->get('/archivos/descargarCSV', \UsuarioController::class . ':ArchivoCSV')
+    ->add(\UsuariosMiddleware::class . ':VerificaAccesoSocio');
 
-  /*
-  $group->get('/descargar', \UsuarioController::class . ':DescargarCSV')
-  ->add(\UsuariosMiddleware::class . ':VerificaAccesoSocio');
-  */
-
+  $group->post('/archivos/insertarCSV', \UsuarioController::class . ':InsertarCSV')
+    ->add(\UsuariosMiddleware::class . ':VerificaAccesoSocio');
 });
 
 
@@ -89,7 +86,8 @@ $app->group('/mesas', function (RouteCollectorProxy $group) {
   ->add(\UsuariosMiddleware::class . ':VerificaAccesoSocio');
 });
 
-$app->group('/orden', function (RouteCollectorProxy $group) {
+$app->group('/orden', function (RouteCollectorProxy $group) 
+{
   $group->get('[/]', \OrdenController::class . ':TraerTodos');  
   $group->get('/{id}', \OrdenController::class . ':TraerUno');  
   $group->post('[/]', \OrdenController::class . ':CargarUno');
@@ -97,11 +95,16 @@ $app->group('/orden', function (RouteCollectorProxy $group) {
   $group->put('/modificarestado', \OrdenController::class . ':ModificarEstado'); 
 });
 
-$app->group('/comanda', function (RouteCollectorProxy $group) {
+$app->group('/comanda', function (RouteCollectorProxy $group) 
+{
   $group->get('[/]', \ComandaController::class . ':TraerTodos');  
-  $group->get('/{id}', \ComandaController::class . ':TraerUno');  
-  $group->post('[/]', \ComandaController::class . ':CargarUno');  
-  $group->put('/{id}', \ComandaController::class . ':ModificarUno');
+  $group->get('/{id}', \ComandaController::class . ':TraerUno');
+
+  $group->post('[/]', \ComandaController::class . ':CargarUno')
+  ->add(\UsuariosMiddleware::class . ':VerificaAccesoMeseroYSocio');  
+  $group->put('/{id}', \ComandaController::class . ':ModificarUno')
+  ->add(\UsuariosMiddleware::class . ':VerificaAccesoMeseroYSocio');
+  
   $group->delete('/borrar', \ComandaController::class . ':BorrarUno')
   ->add(\UsuariosMiddleware::class . ':VerificaAccesoSocio');   
 });
@@ -120,7 +123,10 @@ $app->group('/encuesta', function (RouteCollectorProxy $group) {
   $group->get('[/]', \EncuestaController::class . ':TraerTodos')
   ->add(\UsuariosMiddleware::class . ':VerificaAccesoSocio'); 
   $group->put('/modificar', \EncuestaController::class . ':ModificarUno')
-  ->add(\UsuariosMiddleware::class . ':VerificaAccesoSocio');  
+  ->add(\UsuariosMiddleware::class . ':VerificaAccesoSocio');
+  $group->get('/generarPdf', \EncuestaController::class . ':GenerarPdf')
+  ->add(\UsuariosMiddleware::class . ':VerificaAccesoSocio');
+
 });
 
 

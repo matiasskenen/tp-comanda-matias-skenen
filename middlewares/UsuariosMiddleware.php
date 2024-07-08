@@ -35,7 +35,7 @@ class UsuariosMiddleware{
         return $response->withHeader('Content-Type', 'application/json');
     }
 
-    public function VerificaAccesoMozo(Request $request, RequestHandler $handler)
+    public function VerificaAccesoMeseroYSocio(Request $request, RequestHandler $handler)
     {
         $header = $request->getHeaderLine('authorization'); 
         $response = new Response();
@@ -49,7 +49,7 @@ class UsuariosMiddleware{
             
             if(AutenticacionJWT::VerificarToken($token)){
                 $data = AutenticacionJWT::ObtenerData($token);
-                if($data->tipo_usuario == "Mozo")
+                if($data->tipo_usuario == "mesero" || $data->tipo_usuario == "socio")
                     $response = $handler->handle($request);
                 else {
                     $response->getBody()->write(json_encode(array("error" => "No tiene acceso, no es mozo")));
@@ -62,86 +62,6 @@ class UsuariosMiddleware{
         return $response->withHeader('Content-Type', 'application/json');
     }
 
-    public function VerificaAccesoCocinero(Request $request, RequestHandler $handler)
-    {
-        $header = $request->getHeaderLine('authorization'); 
-        $response = new Response();
-
-        if(empty($header)){
-            $response->getBody()->write(json_encode(array("error" => "No se ingreso el token")));
-            $response = $response->withStatus(401);
-        }
-        else{
-            $token = trim(explode("Bearer", $header)[1]);
-            
-            if(AutenticacionJWT::VerificarToken($token)){
-                $data = AutenticacionJWT::ObtenerData($token);
-                if($data->tipo_usuario == "Cocinero")
-                    $response = $handler->handle($request);
-                else {
-                    $response->getBody()->write(json_encode(array("error" => "No tiene acceso, no es cocinero")));
-                    $response = $response->withStatus(401);
-                }
-            }
-
-            
-        }
-        return $response->withHeader('Content-Type', 'application/json');
-    }
-
-    public function VerificaAccesoBartender(Request $request, RequestHandler $handler)
-    {
-        $header = $request->getHeaderLine('authorization'); 
-        $response = new Response();
-
-        if(empty($header)){
-            $response->getBody()->write(json_encode(array("error" => "No se ingreso el token")));
-            $response = $response->withStatus(401);
-        }
-        else{
-            $token = trim(explode("Bearer", $header)[1]);
-            
-            if(AutenticacionJWT::VerificarToken($token)){
-                $data = AutenticacionJWT::ObtenerData($token);
-                if($data->tipo_usuario == "Bartender")
-                    $response = $handler->handle($request);
-                else {
-                    $response->getBody()->write(json_encode(array("error" => "No tiene acceso, no es bartender")));
-                    $response = $response->withStatus(401);
-                }
-            }
-
-            
-        }
-        return $response->withHeader('Content-Type', 'application/json');
-    }
-
-    public function VerificaAccesoCervecero(Request $request, RequestHandler $handler)
-    {
-        $header = $request->getHeaderLine('authorization'); 
-        $response = new Response();
-
-        if(empty($header)){
-            $response->getBody()->write(json_encode(array("error" => "No se ingreso el token")));
-            $response = $response->withStatus(401);
-        }
-        else{
-            $token = trim(explode("Bearer", $header)[1]);
-            
-            if(AutenticacionJWT::VerificarToken($token)){
-                $data = AutenticacionJWT::ObtenerData($token);
-                if($data->tipo_usuario == "Cervecero")
-                    $response = $handler->handle($request);
-                else {
-                    $response->getBody()->write(json_encode(array("error" => "No tiene acceso, no es cervecero")));
-                    $response = $response->withStatus(401);
-                }
-            }
-
-            
-        }
-        return $response->withHeader('Content-Type', 'application/json');
-    }
 }
 
 

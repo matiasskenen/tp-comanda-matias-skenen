@@ -5,6 +5,7 @@ require_once '../models/encuestas.php';
 require_once '../middlewares/UsuariosMiddleware.php';
 require_once './interfaces/IApiUsable.php';
 
+
 class EncuestaController extends Encuestas implements IApiUsable
 {
     public function CargarUno($request, $response, $args)
@@ -97,5 +98,32 @@ class EncuestaController extends Encuestas implements IApiUsable
             return $response->withHeader('Content-Type', 'application/json');
         }
     }
+
+    public static function GenerarPdf($request, $response, $args) 
+    {
+        $db = conectar();
+        $consulta = "SELECT * FROM encuestas ORDER BY puntuacion DESC";
+        $datos = $db->prepare($consulta);
+        $datos->execute();
+        $encuestas = $datos->fetchAll(PDO::FETCH_ASSOC);
+        $pdf = new \FPDF();
+        $pdf->AddPage();
+        $pdf->SetFont('Arial', '', 12);
+        
+        foreach ($encuestas as $encuesta) {
+            $pdf->MultiCell(0, 10, "ID Encuesta: {$encuesta['id_encuesta']}\n"
+                                    . "Numero Mesa: {$encuesta['numero_mesa']}\n"
+                                    . "Nombre: {$encuesta['nombre']}\n"
+                                    . "Puntuacion: {$encuesta['puntuacion']}\n"
+                                    . "Codigo Pedido: {$encuesta['codigo_pedido']}\n"
+                                    . "Fecha: {$encuesta['fecha']}\n\n");
+        }
+
+        $pdfContent = $pdf->Output('S');
+
+        $response->getBody()->write($pdfContent);
+        return $response->withHeader('Content-Type', 'application/pdf')->withHeader('Content-Disposition', 'attachment; filename="encuestas.pdf"');
+    }
+
 }
 ?>
