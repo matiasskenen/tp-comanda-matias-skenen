@@ -53,6 +53,7 @@ class Orden{
     
         if ($puesto == "mesero") 
         {
+            //$consulta = "SELECT mesa, estado FROM comanda_productos";
             $consulta = "SELECT mesa, GROUP_CONCAT(estado) as estados FROM comanda_productos GROUP BY mesa";
         }else if($puesto == "socio")
         {
@@ -65,7 +66,7 @@ class Orden{
         try {
             $stmt = $db->prepare($consulta);
             $stmt->execute();
-            $ordenes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $ordenes = $stmt->fetchAll();
     
             if ($ordenes) 
             {
@@ -120,11 +121,10 @@ class Orden{
                 $update->bindParam(':id_comanda', $id_comanda);
                 $update->bindParam(':puesto', $puesto);
         
-                // Ejecutar la consulta
                 $update->execute();
         
             } catch (PDOException $e) {
-                // Manejar la excepción y mostrar un mensaje de error
+
                 echo "Error en la base de datos: " . $e->getmensaje();
             }
         }
@@ -133,19 +133,15 @@ class Orden{
             try {
                 $db = conectar();
                 
-                // Ajuste de la consulta SQL
                 $consulta = "UPDATE comanda_productos SET estado = :estado WHERE id_comanda = :id_comanda";
         
                 $update = $db->prepare($consulta);
-                // Vincular los parámetros correctamente
                 $update->bindParam(':estado', $estado);
                 $update->bindParam(':id_comanda', $id_comanda);
         
-                // Ejecutar la consulta
                 $update->execute();
         
             } catch (PDOException $e) {
-                // Manejar la excepción y mostrar un mensaje de error
                 echo "Error en la base de datos: " . $e->getmensaje();
             }
         }
@@ -185,7 +181,7 @@ class Orden{
             $datos->bindParam(':id_comanda', $id_comanda);
             $datos->execute();
 
-            $resultado = $datos->fetch(PDO::FETCH_ASSOC);
+            $resultado = $datos->fetch();
 
             if ($resultado) {
                 return $resultado['mesa'];
@@ -210,7 +206,7 @@ class Orden{
             $datos->bindParam(':id_comanda', $id_comanda);
             $datos->execute();
 
-            $resultado = $datos->fetch(PDO::FETCH_ASSOC);
+            $resultado = $datos->fetch();
 
             if ($resultado) {
                 return $resultado['demora'];
@@ -235,7 +231,7 @@ class Orden{
             $datosSelect->bindParam(':id_mesa', $id_mesa);
             $datosSelect->execute();
 
-            $resultado = $datosSelect->fetch(PDO::FETCH_ASSOC);
+            $resultado = $datosSelect->fetch();
 
             if ($resultado) 
             {
