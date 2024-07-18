@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Usuarios</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        form {
+            max-width: 400px;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .response-box {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            max-width: 400px;
+        }
+        .response-box pre {
+            margin: 0;
+            white-space: pre-wrap; /* Keeps formatting */
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <h1>Login Usuarios</h1>
+    <form id="loginForm">
+        <input type="hidden" name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjAyNzc0NjgsImV4cCI6MTcyMDMzNzQ2OCwiZGF0YSI6eyJ1c3VhcmlvIjoic29jaW9tYXRpYXMiLCJ0aXBvX3VzdWFyaW8iOiJzb2NpbyJ9LCJhcHAiOiJMYSBDb21hbmRhIC0gSkMifQ.-HkHvgOFFJiQSbeky-KWlu4uuYgexIWfTEpOUYw9rsI">
+        <label for="usuario">Usuario:</label>
+        <input type="text" id="usuario" name="usuario" value="matiasMozo" required>
+        
+        <label for="puesto">Puesto:</label>
+        <input type="text" id="puesto" name="puesto" value="mesero" required>
+        
+        <label for="clave">Clave:</label>
+        <input type="password" id="clave" name="clave" value="matias1234" required>
+        
+        <input type="submit" value="Login">
+    </form>
+    
+    <!-- Response Box -->
+    <div class="response-box" id="responseBox">
+        <h2>Respuesta:</h2>
+        <pre id="responseText">Aquí se mostrará la respuesta del servidor después de enviar el formulario.</pre>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            var formData = new FormData(this);
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'http://localhost:666/usuarios/login', true);
+            
+            xhr.onload = function() {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    // Success
+                    document.getElementById('responseText').textContent = JSON.stringify(JSON.parse(xhr.responseText), null, 2);
+                } else {
+                    // Error
+                    document.getElementById('responseText').textContent = 'Error: ' + xhr.status;
+                }
+            };
+
+            xhr.onerror = function() {
+                document.getElementById('responseText').textContent = 'Request failed';
+            };
+
+            xhr.send(formData);
+        });
+    </script>
+</body>
+</html>

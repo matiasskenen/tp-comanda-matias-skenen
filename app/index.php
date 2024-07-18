@@ -1,5 +1,9 @@
 <?php
 
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: Authorization, Content-Type");
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+
 /*
 
 php -S localhost:666 -t app
