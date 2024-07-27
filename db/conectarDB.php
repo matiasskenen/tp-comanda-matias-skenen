@@ -3,20 +3,19 @@ function conectar()
 {
     try
     {
-        $host = 'boxqjpnk3zafvmyurchl-mysql.services.clever-cloud.com';
-        $dbname = 'boxqjpnk3zafvmyurchl';
-        $username = 'urqoccbh50qn4g3a';
-        $password = 'dzq2oWTnq7GyDVGLQIOA';
-        $port = '3306';
+        $host = 'localhost';
+        $dbname = 'api-comanda-tp';
+        $username = 'root';
+        $password = '';
 
-        $conectar = new PDO("mysql:host=$host;port=$port;dbname=$dbname", $username, $password);
+        $conectar = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
         $conectar->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         
         return $conectar;
     }
     catch (PDOException $exepcion)
     {
-        echo "Error al conectar: " . $exepcion->getMessage() . "<br>";
+        echo "Erro al conectar: " . $exepcion->getMessage() . "<br>";
         return null;
     }
 }
