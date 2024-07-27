@@ -24,6 +24,12 @@
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
+        .form-section {
+            display: none;
+        }
+        .form-section.active {
+            display: block;
+        }
         form {
             margin-bottom: 20px;
             padding: 15px;
@@ -79,66 +85,99 @@
             border: 1px solid #ddd;
             border-radius: 4px;
         }
+        .nav-buttons {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .nav-buttons button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 0 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .nav-buttons button:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Login y Agregar Usuarios</h1>
 
-        <h2>Login Usuarios</h2>
-        <form id="loginFormUsuarios">
-            <input type="hidden" name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjAyNzc0NjgsImV4cCI6MTcyMDMzNzQ2OCwiZGF0YSI6eyJ1c3VhcmlvIjoic29jaW9tYXRpYXNhcyIsInRpcG9fdXN1YXJpbyI6InNvY2lvIiwgImFwcCI6IkxhIENvbWFuZGEtSkMifQ.-HkHvgOFFJiQSbeky-KWlu4uuYgexIWfTEpOUYw9rsI">
-            <label for="usuarioUsuarios">Usuario:</label>
-            <input type="text" id="usuarioUsuarios" name="usuario" value="matiasMozo" required>
-            
-            <label for="puestoUsuarios">Puesto:</label>
-            <input type="text" id="puestoUsuarios" name="puesto" value="mesero" required>
-            
-            <label for="claveUsuarios">Clave:</label>
-            <input type="password" id="claveUsuarios" name="clave" value="matias1234" required>
-            
-            <input type="submit" value="Login">
-        </form>
-        
-        <h2>Login Socios</h2>
-        <form id="loginFormSocios">
-            <label for="usuarioSocios">Usuario:</label>
-            <input type="text" id="usuarioSocios" name="usuario" value="sociomatias" required>
-            
-            <label for="puestoSocios">Puesto:</label>
-            <input type="text" id="puestoSocios" name="puesto" value="socio" required>
-            
-            <label for="claveSocios">Clave:</label>
-            <input type="password" id="claveSocios" name="clave" value="matias1234" required>
-            
-            <input type="submit" value="Login">
-        </form>
+        <!-- Navigation Buttons -->
+        <div class="nav-buttons">
+            <button onclick="showForm('loginUsuarios')">Login Usuarios</button>
+            <button onclick="showForm('loginSocios')">Login Socios</button>
+            <button onclick="showForm('agregarUsuario')">Agregar Usuario</button>
+        </div>
 
-        <h2>Agregar Usuario</h2>
-        <form id="loginFormAgregarUsuarios">
-            <label for="token">Token:</label>
-            <input type="text" id="token" name="token" value="" required>
+        <!-- Login Usuarios Form -->
+        <div id="loginUsuarios" class="form-section active">
+            <h2>Login Usuarios</h2>
+            <form id="loginFormUsuarios">
+                <input type="hidden" name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjAyNzc0NjgsImV4cCI6MTcyMDMzNzQ2OCwiZGF0YSI6eyJ1c3VhcmlvIjoic29jaW9tYXRpYXNhcyIsInRpcG9fdXN1YXJpbyI6InNvY2lvIiwgImFwcCI6IkxhIENvbWFuZGEtSkMifQ.-HkHvgOFFJiQSbeky-KWlu4uuYgexIWfTEpOUYw9rsI">
+                <label for="usuarioUsuarios">Usuario:</label>
+                <input type="text" id="usuarioUsuarios" name="usuario" value="matiasMozo" required>
+                
+                <label for="puestoUsuarios">Puesto:</label>
+                <input type="text" id="puestoUsuarios" name="puesto" value="mesero" required>
+                
+                <label for="claveUsuarios">Clave:</label>
+                <input type="password" id="claveUsuarios" name="clave" value="matias1234" required>
+                
+                <input type="submit" value="Login">
+            </form>
+        </div>
 
-            <label for="usuario">Usuario:</label>
-            <input type="text" id="usuario" name="usuario" value="matiasCocinero" required>
-            
-            <label for="mail">Mail:</label>
-            <input type="email" id="mail" name="mail" value="matias.skenen@gmail.com" required>
+        <!-- Login Socios Form -->
+        <div id="loginSocios" class="form-section">
+            <h2>Login Socios</h2>
+            <form id="loginFormSocios">
+                <label for="usuarioSocios">Usuario:</label>
+                <input type="text" id="usuarioSocios" name="usuario" value="sociomatias" required>
+                
+                <label for="puestoSocios">Puesto:</label>
+                <input type="text" id="puestoSocios" name="puesto" value="socio" required>
+                
+                <label for="claveSocios">Clave:</label>
+                <input type="password" id="claveSocios" name="clave" value="matias1234" required>
+                
+                <input type="submit" value="Login">
+            </form>
+        </div>
 
-            <label for="clave">Clave:</label>
-            <input type="password" id="clave" name="clave" value="matias1234" required>
+        <!-- Agregar Usuario Form -->
+        <div id="agregarUsuario" class="form-section">
+            <h2>Agregar Usuario</h2>
+            <form id="loginFormAgregarUsuarios">
+                <label for="token">Token:</label>
+                <input type="text" id="token" name="token" value="" required>
 
-            <label for="puesto">Puesto:</label>
-            <input type="text" id="puesto" name="puesto" value="cocinero" required>
+                <label for="usuario">Usuario:</label>
+                <input type="text" id="usuario" name="usuario" value="matiasCocinero" required>
+                
+                <label for="mail">Mail:</label>
+                <input type="email" id="mail" name="mail" value="matias.skenen@gmail.com" required>
 
-            <label for="estado">Estado:</label>
-            <input type="text" id="estado" name="estado" value="1" required>
+                <label for="clave">Clave:</label>
+                <input type="password" id="clave" name="clave" value="matias1234" required>
 
-            <label for="fecha_ingreso">Fecha de Ingreso:</label>
-            <input type="date" id="fecha_ingreso" name="fecha_ingreso" value="2004-04-20" required>
-            
-            <input type="submit" value="Agregar">
-        </form>
+                <label for="puesto">Puesto:</label>
+                <input type="text" id="puesto" name="puesto" value="cocinero" required>
+
+                <label for="estado">Estado:</label>
+                <input type="text" id="estado" name="estado" value="1" required>
+
+                <label for="fecha_ingreso">Fecha de Ingreso:</label>
+                <input type="date" id="fecha_ingreso" name="fecha_ingreso" value="2004-04-20" required>
+                
+                <input type="submit" value="Agregar">
+            </form>
+        </div>
 
         <!-- Response Box -->
         <div class="response-box" id="responseBox">
@@ -148,9 +187,23 @@
     </div>
 
     <script>
-        // Manejo del formulario de Usuarios
+        function showForm(formId) {
+            // Hide all forms
+            var forms = document.querySelectorAll('.form-section');
+            forms.forEach(function(form) {
+                form.classList.remove('active');
+            });
+
+            // Show the selected form
+            document.getElementById(formId).classList.add('active');
+        }
+
+        // Initialize the page to show the Login Usuarios form by default
+        showForm('loginUsuarios');
+
+        // Handle the form submissions
         document.getElementById('loginFormUsuarios').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent the default form submission
+            event.preventDefault();
 
             var formData = new FormData(this);
             var xhr = new XMLHttpRequest();
@@ -158,10 +211,8 @@
             
             xhr.onload = function() {
                 if (xhr.status >= 200 && xhr.status < 300) {
-                    // Success
                     document.getElementById('responseText').textContent = JSON.stringify(JSON.parse(xhr.responseText), null, 2);
                 } else {
-                    // Error
                     document.getElementById('responseText').textContent = 'Error: ' + xhr.status;
                 }
             };
@@ -173,9 +224,8 @@
             xhr.send(formData);
         });
 
-        // Manejo del formulario de Socios
         document.getElementById('loginFormSocios').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent the default form submission
+            event.preventDefault();
 
             var formData = new FormData(this);
             var xhr = new XMLHttpRequest();
@@ -183,10 +233,8 @@
             
             xhr.onload = function() {
                 if (xhr.status >= 200 && xhr.status < 300) {
-                    // Success
                     document.getElementById('responseText').textContent = JSON.stringify(JSON.parse(xhr.responseText), null, 2);
                 } else {
-                    // Error
                     document.getElementById('responseText').textContent = 'Error: ' + xhr.status;
                 }
             };
@@ -198,26 +246,20 @@
             xhr.send(formData);
         });
 
-        // Manejo del formulario para Agregar Usuario
         document.getElementById('loginFormAgregarUsuarios').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent the default form submission
+            event.preventDefault();
 
             var formData = new FormData(this);
             var xhr = new XMLHttpRequest();
             xhr.open('POST', 'http://localhost:666/usuarios/alta', true);
 
-            // Get the token from the form input
             var token = document.getElementById('token').value;
-            
-            // Add the Authorization header with the Bearer token
             xhr.setRequestHeader('Authorization', 'Bearer ' + token);
 
             xhr.onload = function() {
                 if (xhr.status >= 200 && xhr.status < 300) {
-                    // Success
                     document.getElementById('responseText').textContent = JSON.stringify(JSON.parse(xhr.responseText), null, 2);
                 } else {
-                    // Error
                     document.getElementById('responseText').textContent = 'Error: ' + xhr.status;
                 }
             };
