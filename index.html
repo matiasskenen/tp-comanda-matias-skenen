@@ -3,116 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login y Agregar Usuarios</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-        }
-        h1 {
-            color: #333;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        .form-section {
-            display: none;
-        }
-        .form-section.active {
-            display: block;
-        }
-        form {
-            margin-bottom: 20px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: #fafafa;
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-        }
-        input[type="text"], input[type="password"], input[type="email"], input[type="date"] {
-            width: calc(100% - 16px);
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        input[type="submit"] {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin-top: 10px;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-        input[type="submit"]:hover {
-            background-color: #45a049;
-        }
-        .response-box {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 15px;
-            background-color: #fff;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        .response-box h2 {
-            margin-top: 0;
-        }
-        .response-box pre {
-            margin: 0;
-            white-space: pre-wrap; /* Keeps formatting */
-            word-wrap: break-word;
-            background: #f4f4f4;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        .nav-buttons {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .nav-buttons button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            margin: 0 10px;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-        .nav-buttons button:hover {
-            background-color: #45a049;
-        }
-    </style>
+    <title>LA COMANDA - MATIAS SKENEN</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Login y Agregar Usuarios</h1>
+        <h1>LA COMANDA - MATIAS SKENEN  </h1>
 
         <!-- Navigation Buttons -->
         <div class="nav-buttons">
-            <button onclick="showForm('loginUsuarios')">Login Usuarios</button>
-            <button onclick="showForm('loginSocios')">Login Socios</button>
-            <button onclick="showForm('agregarUsuario')">Agregar Usuario</button>
+            <button class="btn-login" onclick="showForm('loginUsuarios')">Login Usuarios</button>
+            <button class="btn-login" onclick="showForm('loginSocios')">Login Socios</button>
+            <button class="btn-create" onclick="showForm('agregarUsuario')">Agregar Usuario</button>
+            <button class="btn-create" onclick="showForm('agregarPedido')">Agregar Pedido</button>
+            <button class="btn-create" onclick="showForm('agregarMesa')">Agregar Mesa</button>
+            <button class="btn-create" onclick="showForm('agregarEncuesta')">Agregar Encuesta</button>
         </div>
 
         <!-- Login Usuarios Form -->
@@ -179,6 +84,33 @@
             </form>
         </div>
 
+
+        <div id="agregarPedido" class="form-section">
+            <form id="comandaForm" method="POST" action="http://localhost:666/comanda">
+                <label for="id_mesa">ID Mesa:</label>
+                <input type="text" id="id_mesa" name="id_mesa" value="1" required><br><br>
+                
+                <label for="cliente">Cliente:</label>
+                <input type="text" id="cliente" name="cliente" value="matias" required><br><br>
+                
+                <label for="estado">Estado:</label>
+                <input type="text" id="estado" name="estado" value="1" required><br><br>
+                
+                <label for="productos">Productos (en formato JSON):</label>
+                <textarea id="productos" name="productos" rows="4" cols="50" required>
+                [
+                    {"id": 1, "cantidad": 1},
+                    {"id": 2, "cantidad": 1},
+                    {"id": 3, "cantidad": 1},
+                    {"id": 4, "cantidad": 1}
+                ]
+                </textarea><br><br>
+                
+                <button type="submit">Enviar Comanda</button>
+            </form>
+        </div>  
+        
+
         <!-- Response Box -->
         <div class="response-box" id="responseBox">
             <h2>Respuesta:</h2>
@@ -186,90 +118,7 @@
         </div>
     </div>
 
-    <script>
-        function showForm(formId) {
-            // Hide all forms
-            var forms = document.querySelectorAll('.form-section');
-            forms.forEach(function(form) {
-                form.classList.remove('active');
-            });
+    <script src="script.js"></script>
 
-            // Show the selected form
-            document.getElementById(formId).classList.add('active');
-        }
-
-        // Initialize the page to show the Login Usuarios form by default
-        showForm('loginUsuarios');
-
-        // Handle the form submissions
-        document.getElementById('loginFormUsuarios').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            var formData = new FormData(this);
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'http://localhost:666/usuarios/login', true);
-            
-            xhr.onload = function() {
-                if (xhr.status >= 200 && xhr.status < 300) {
-                    document.getElementById('responseText').textContent = JSON.stringify(JSON.parse(xhr.responseText), null, 2);
-                } else {
-                    document.getElementById('responseText').textContent = 'Error: ' + xhr.status;
-                }
-            };
-
-            xhr.onerror = function() {
-                document.getElementById('responseText').textContent = 'Request failed';
-            };
-
-            xhr.send(formData);
-        });
-
-        document.getElementById('loginFormSocios').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            var formData = new FormData(this);
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'http://localhost:666/usuarios/login', true);
-            
-            xhr.onload = function() {
-                if (xhr.status >= 200 && xhr.status < 300) {
-                    document.getElementById('responseText').textContent = JSON.stringify(JSON.parse(xhr.responseText), null, 2);
-                } else {
-                    document.getElementById('responseText').textContent = 'Error: ' + xhr.status;
-                }
-            };
-
-            xhr.onerror = function() {
-                document.getElementById('responseText').textContent = 'Request failed';
-            };
-
-            xhr.send(formData);
-        });
-
-        document.getElementById('loginFormAgregarUsuarios').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            var formData = new FormData(this);
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'http://localhost:666/usuarios/alta', true);
-
-            var token = document.getElementById('token').value;
-            xhr.setRequestHeader('Authorization', 'Bearer ' + token);
-
-            xhr.onload = function() {
-                if (xhr.status >= 200 && xhr.status < 300) {
-                    document.getElementById('responseText').textContent = JSON.stringify(JSON.parse(xhr.responseText), null, 2);
-                } else {
-                    document.getElementById('responseText').textContent = 'Error: ' + xhr.status;
-                }
-            };
-
-            xhr.onerror = function() {
-                document.getElementById('responseText').textContent = 'Request failed';
-            };
-
-            xhr.send(formData);
-        });
-    </script>
 </body>
 </html>
